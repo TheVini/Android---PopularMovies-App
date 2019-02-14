@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        tools:context=".DetailActivity"
+        tools:context=".activity.DetailActivity"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 

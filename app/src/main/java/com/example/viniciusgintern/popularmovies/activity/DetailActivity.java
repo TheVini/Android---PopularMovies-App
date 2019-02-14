@@ -1,9 +1,10 @@
-package com.example.viniciusgintern.popularmovies;
+package com.example.viniciusgintern.popularmovies.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
+import com.example.viniciusgintern.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {

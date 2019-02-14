@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerPostagem"
+        android:id="@+id/recyclerMovies"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
