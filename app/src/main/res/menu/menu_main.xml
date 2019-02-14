@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/miCompose1"
+        android:icon="@drawable/ic_temporary"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+
+    <item
+        android:id="@+id/miCompose2"
+        android:icon="@drawable/ic_temporary"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+
+    <item
+        android:id="@+id/miCompose3"
+        android:icon="@drawable/ic_temporary"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+</menu>
