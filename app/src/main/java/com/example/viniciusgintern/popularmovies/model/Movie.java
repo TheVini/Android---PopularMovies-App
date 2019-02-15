@@ -7,17 +7,17 @@ public class Movie {
     private String movieDuration;
     private String movieRate;
     private String movieDescription;
-    private int movieImage;
+    private String movieImageAddress;
 
     public Movie() {
     }
 
-    public Movie(String movieName, String movieDuration, String movieRate, String movieDescription, int movieImage) {
+    public Movie(String movieName, String movieDuration, String movieRate, String movieDescription, String movieImageAddress) {
         this.movieName = movieName;
         this.movieDuration = movieDuration;
         this.movieRate = movieRate;
         this.movieDescription = movieDescription;
-        this.movieImage = movieImage;
+        this.movieImageAddress = movieImageAddress;
     }
 
     public String getMovieName() {
@@ -52,11 +52,11 @@ public class Movie {
         this.movieDescription = movieDescription;
     }
 
-    public int getMovieImage() {
-        return movieImage;
+    public String getMovieImageAddress() {
+        return movieImageAddress;
     }
 
-    public void setMovieImage(int movieImage) {
-        this.movieImage = movieImage;
+    public void setMovieImageAddress(String movieImage) {
+        this.movieImageAddress = movieImageAddress;
     }
 }
