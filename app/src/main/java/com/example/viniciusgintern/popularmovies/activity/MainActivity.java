@@ -1,5 +1,7 @@
 package com.example.viniciusgintern.popularmovies.activity;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,7 +33,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerMovies = findViewById(R.id.recyclerMovies);
 
         //Define Layout
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        int orientation = this.getResources().getConfiguration().orientation;
+        int imageAmount = 2;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // code for landscape mode
+            imageAmount = 4;
+        }
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,imageAmount);
         recyclerMovies.setLayoutManager(layoutManager);
 
         //Define adapter
@@ -49,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
                         public void onItemClick(View view, int position) {
                             Movie movie = movies.get(position);
                             Toast.makeText(getApplicationContext(),movie.getMovieName(),Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+
+                            intent.putExtra("objeto",movie);
+
+                            startActivity(intent);
                         }
 
                         @Override
@@ -89,26 +103,35 @@ public class MainActivity extends AppCompatActivity {
     public void getMoviesFromApi(){
         Movie movieList;
 
-        for(int i = 0; i<20;i++){
-            movieList = new Movie("Filme1",
+        String text = "Nulla id turpis nisl. Vestibulum fringilla massa eu lacus bibendum, eget semper nisi rutrum. In imperdiet elementum elit sed ultricies. Nam interdum sollicitudin lectus sed fringilla. Aenean et iaculis libero, quis euismod justo. Phasellus tristique varius leo in sagittis. Fusce sodales eleifend fringilla. Integer efficitur risus nec enim tincidunt dignissim. Fusce sed elit blandit, scelerisque felis et, mollis tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc quis felis tortor. Nulla mattis augue a cursus semper.";
+        text = text + text + text + text + text + text + text + text + text + text + text + text;
+        for(int i = 0; i<5;i++){
+            movieList = new Movie("Filme 1",
                     "150min",
                     "9.0/10",
-                    "Very very very very very good",
+                    text,
                     "http://i.imgur.com/DvpvklR.png");
             this.movies.add(movieList);
-        }
-        movieList = new Movie("Filme2",
-                "150min",
-                "9.0/10",
-                "Very very very very very good",
-                "https://i.imgur.com/sq4AIWL.jpg");
-        this.movies.add(movieList);
+            movieList = new Movie("Filme 2",
+                    "150min",
+                    "9.0/10",
+                    text,
+                    "https://i.imgur.com/sq4AIWL.jpg");
+            this.movies.add(movieList);
 
-        movieList = new Movie("Filme3",
-                "150min",
-                "9.0/10",
-                "Very very very very very good",
-                "https://i.imgur.com/6CIFFZl.jpg");
-        this.movies.add(movieList);
+            movieList = new Movie("Filme 3",
+                    "150min",
+                    "9.0/10",
+                    text,
+                    "https://i.imgur.com/6CIFFZl.jpg");
+            this.movies.add(movieList);
+
+            movieList = new Movie("Filme 4",
+                    "150min",
+                    "9.0/10",
+                    text,
+                    "https://i.imgur.com/Mv8ZLmW.jpg");
+            this.movies.add(movieList);
+        }
     }
 }

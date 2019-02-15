@@ -38,8 +38,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         Movie movie = movies.get(i);
-
         Picasso.get().load(movie.getMovieImageAddress()).into(myViewHolder.movieImage);
+
         //myViewHolder.movieImage.setImageResource(movie.getMovieImage());
     }
 
@@ -55,6 +55,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             super(itemView);
             movieImage = itemView.findViewById(R.id.movieImage);
         }
+
+
     }
 
 }

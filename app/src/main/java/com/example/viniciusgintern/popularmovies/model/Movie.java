@@ -2,7 +2,9 @@ package com.example.viniciusgintern.popularmovies.model;
 
 import android.widget.ImageView;
 
-public class Movie {
+import java.io.Serializable;
+
+public class Movie implements Serializable {
     private String movieName;
     private String movieDuration;
     private String movieRate;
