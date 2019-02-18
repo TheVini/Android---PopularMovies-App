@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerMovies;
+    private Toolbar toolbar;
     private List<Movie> movies = new ArrayList<>();
 
     @Override
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = findViewById(R.id.mainToolbar);
+        setSupportActionBar(toolbar);
         recyclerMovies = findViewById(R.id.recyclerMovies);
 
         //Define Layout
@@ -78,27 +83,15 @@ public class MainActivity extends AppCompatActivity {
                     }
             )
         );
-
-        //Daqui em diante é codificação antiga
-        //this.mViewHolder.image1.setOnClickListener(this);
-
-        // Find the toolbar view inside the activity layout
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
-        //setSupportActionBar(toolbar);
-
     }
 
-    /*
-    //Trecho para criação do menu superior
+    //Trecho de exibição do menu superior
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-    */
 
     public void getMoviesFromApi(){
         Movie movieList;
@@ -106,27 +99,31 @@ public class MainActivity extends AppCompatActivity {
         String text = "Nulla id turpis nisl. Vestibulum fringilla massa eu lacus bibendum, eget semper nisi rutrum. In imperdiet elementum elit sed ultricies. Nam interdum sollicitudin lectus sed fringilla. Aenean et iaculis libero, quis euismod justo. Phasellus tristique varius leo in sagittis. Fusce sodales eleifend fringilla. Integer efficitur risus nec enim tincidunt dignissim. Fusce sed elit blandit, scelerisque felis et, mollis tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc quis felis tortor. Nulla mattis augue a cursus semper.";
         text = text + text + text + text + text + text + text + text + text + text + text + text;
         for(int i = 0; i<5;i++){
-            movieList = new Movie("Filme 1",
+            movieList = new Movie("A arte",
+                    "2018",
                     "150min",
                     "9.0/10",
                     text,
                     "http://i.imgur.com/DvpvklR.png");
             this.movies.add(movieList);
-            movieList = new Movie("Filme 2",
+            movieList = new Movie("A Moto - Parte 1",
+                    "2018",
                     "150min",
                     "9.0/10",
                     text,
                     "https://i.imgur.com/sq4AIWL.jpg");
             this.movies.add(movieList);
 
-            movieList = new Movie("Filme 3",
+            movieList = new Movie("A Moto - Parte 2",
+                    "2018",
                     "150min",
                     "9.0/10",
                     text,
                     "https://i.imgur.com/6CIFFZl.jpg");
             this.movies.add(movieList);
 
-            movieList = new Movie("Filme 4",
+            movieList = new Movie("The chemistry",
+                    "2018",
                     "150min",
                     "9.0/10",
                     text,

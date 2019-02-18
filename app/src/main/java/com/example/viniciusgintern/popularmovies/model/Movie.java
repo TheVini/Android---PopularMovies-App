@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Movie implements Serializable {
     private String movieName;
+    private String movieYear;
     private String movieDuration;
     private String movieRate;
     private String movieDescription;
@@ -14,8 +15,9 @@ public class Movie implements Serializable {
     public Movie() {
     }
 
-    public Movie(String movieName, String movieDuration, String movieRate, String movieDescription, String movieImageAddress) {
+    public Movie(String movieName, String movieYear,String movieDuration, String movieRate, String movieDescription, String movieImageAddress) {
         this.movieName = movieName;
+        this.movieYear = movieYear;
         this.movieDuration = movieDuration;
         this.movieRate = movieRate;
         this.movieDescription = movieDescription;
@@ -28,6 +30,14 @@ public class Movie implements Serializable {
 
     public void setMovieName(String movieName) {
         this.movieName = movieName;
+    }
+
+    public String getMovieYear() {
+        return movieYear;
+    }
+
+    public void setMovieYear(String movieYear) {
+        this.movieYear = movieYear;
     }
 
     public String getMovieDuration() {
