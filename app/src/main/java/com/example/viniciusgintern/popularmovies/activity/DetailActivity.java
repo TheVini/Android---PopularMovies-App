@@ -45,7 +45,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.movieTitle.setText(movie.getMovieTitle());
         this.mViewHolder.movieYear.setText(movie.getMovieYear());
         this.mViewHolder.movieDuration.setText(movie.getMovieDuration());
-        this.mViewHolder.movieRate.setText(movie.getMovieRate());
+        this.mViewHolder.movieRate.setText(movie.getMovieRate().toString());
         this.mViewHolder.movieDescription.setText(movie.getMovieDescription());
 
         Picasso.get().load(movie.getMovieImageAddress()).into(this.mViewHolder.detailImage);

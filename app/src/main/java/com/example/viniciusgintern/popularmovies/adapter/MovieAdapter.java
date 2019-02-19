@@ -1,5 +1,6 @@
 package com.example.viniciusgintern.popularmovies.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.activity.DetailActivity;
@@ -20,10 +22,10 @@ import static android.support.v4.content.ContextCompat.startActivity;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
 
-    private List<Movie> movies;
+    private List<Movie> moviesList;
 
     public MovieAdapter(List<Movie> moviesList){
-        this.movies = moviesList;
+        this.moviesList = moviesList;
     }
 
     //Inicialização do componente que exibe as imagens
@@ -39,16 +41,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     //Componente que exibe as imagens na main
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        Movie movie = movies.get(i);
-        Picasso.get().load(movie.getMovieImageAddress()).into(myViewHolder.movieImage);
-
-        //myViewHolder.movieImage.setImageResource(movie.getMovieImage());
+        Movie movie = moviesList.get(i);
+        System.out.println();
+        Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieImageAddress()).into(myViewHolder.movieImage);
     }
 
     //Componente que define o tamanho da lista que sera retornada
     @Override
     public int getItemCount() {
-        return movies.size();
+        return moviesList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -58,7 +59,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             super(itemView);
             movieImage = itemView.findViewById(R.id.movieImage);
         }
-
 
     }
 
