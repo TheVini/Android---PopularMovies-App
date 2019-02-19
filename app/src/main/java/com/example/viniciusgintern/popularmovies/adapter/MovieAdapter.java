@@ -26,6 +26,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         this.movies = moviesList;
     }
 
+    //Inicialização do componente que exibe as imagens
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -35,6 +36,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         return new MyViewHolder(listItem);
     }
 
+    //Componente que exibe as imagens na main
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         Movie movie = movies.get(i);
@@ -43,6 +45,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         //myViewHolder.movieImage.setImageResource(movie.getMovieImage());
     }
 
+    //Componente que define o tamanho da lista que sera retornada
     @Override
     public int getItemCount() {
         return movies.size();

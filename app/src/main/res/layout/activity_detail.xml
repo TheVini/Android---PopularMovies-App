@@ -14,7 +14,7 @@
             layout="@layout/toolbar_detail"/>
 
         <TextView
-            android:id="@+id/movieName"
+            android:id="@+id/movieTitle"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@color/colorLight"
@@ -39,7 +39,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/movieName"
+            app:layout_constraintTop_toBottomOf="@+id/movieTitle"
             app:srcCompat="@mipmap/ic_launcher" />
 
         <android.support.constraint.Guideline
@@ -60,7 +60,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/movieName" />
+            app:layout_constraintTop_toBottomOf="@+id/movieTitle" />
 
         <TextView
             android:id="@+id/movieDuration"

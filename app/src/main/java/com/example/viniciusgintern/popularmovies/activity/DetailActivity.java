@@ -23,7 +23,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         this.mViewHolder.detailImage = findViewById(R.id.detailImage);
-        this.mViewHolder.movieName = findViewById(R.id.movieName);
+        this.mViewHolder.movieTitle = findViewById(R.id.movieTitle);
         this.mViewHolder.movieYear = findViewById(R.id.movieYear);
         this.mViewHolder.movieDuration = findViewById(R.id.movieDuration);
         this.mViewHolder.movieRate = findViewById(R.id.movieRate);
@@ -42,7 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         Bundle dados = getIntent().getExtras();
         Movie movie = (Movie) dados.getSerializable("objeto");
 
-        this.mViewHolder.movieName.setText(movie.getMovieName());
+        this.mViewHolder.movieTitle.setText(movie.getMovieTitle());
         this.mViewHolder.movieYear.setText(movie.getMovieYear());
         this.mViewHolder.movieDuration.setText(movie.getMovieDuration());
         this.mViewHolder.movieRate.setText(movie.getMovieRate());
@@ -71,7 +71,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private static class ViewHolder{
         ImageView detailImage;
-        TextView movieName;
+        TextView movieTitle;
         TextView movieYear;
         TextView movieDuration;
         TextView movieRate;

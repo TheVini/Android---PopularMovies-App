@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         int orientation = this.getResources().getConfiguration().orientation;
         int imageAmount = 2;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // code for landscape mode
+            //Código para o modo landscape
             imageAmount = 4;
         }
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,imageAmount);
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         MovieAdapter adapter = new MovieAdapter(movies);
         recyclerMovies.setAdapter(adapter);
 
-        //Evento de click
+        //Evento de click em cada imagem
         recyclerMovies.addOnItemTouchListener(
             new RecyclerItemClickListener(
                     getApplicationContext(),
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(View view, int position) {
                             Movie movie = movies.get(position);
-                            Toast.makeText(getApplicationContext(),movie.getMovieName(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onLongItemClick(View view, int position) {
                             Movie movie = movies.get(position);
-                            Toast.makeText(getApplicationContext(),movie.getMovieName(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Lista de filmes para teste
     public void getMoviesFromApi(){
         Movie movieList;
 
