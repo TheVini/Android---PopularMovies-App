@@ -14,10 +14,11 @@ import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
-import com.example.viniciusgintern.popularmovies.RetrofitService;
-import com.example.viniciusgintern.popularmovies.adapter.MovieAdapter;
-import com.example.viniciusgintern.popularmovies.model.Movie;
-import com.example.viniciusgintern.popularmovies.model.Result;
+import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService;
+import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
+import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
+import com.example.viniciusgintern.popularmovies.model.MovieModel.Result;
+import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitServiceClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private List<Movie> movieList = new ArrayList<>();
     private Retrofit retrofit;
+
+    /***************************************/
+    public final String APIKey = "Inserir a APIKey aqui";
+    /***************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        //Carregamento dos daddos da API
+        //Carregamento dos dados pela API
         this.getMoviesFromApi();
     }
 
@@ -73,12 +78,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    //Lista de filmes para teste
+    //Aquisição de dados dos filmes
     public void getMoviesFromApi(){
-        /***************************************/
-        String APIKey = "INSERIR A APIKEY AQUI";
-        /***************************************/
-        
+
+
         RetrofitService service = retrofit.create(RetrofitService.class);
         Call<Result> call = service.getMovies(APIKey);
 
@@ -90,9 +93,11 @@ public class MainActivity extends AppCompatActivity {
                     Result result = response.body();
                     if(result != null){
                         //Define adapter
-                        MovieAdapter adapter = new MovieAdapter(result.getMovieList());
+                        MoviesListAdapter adapter = new MoviesListAdapter(result.getMovieList());
                         recyclerMovies.setAdapter(adapter);
-                        callerClickEvents();
+
+                        System.out.println(result.getMovieList());
+                        clickEventsCaller(result.getMovieList());
                     }
                 }
             }
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void callerClickEvents() {
+    private void clickEventsCaller(final List<Movie> movieList) {
         //Evento de click em cada imagem
         recyclerMovies.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(View view, int position) {
                                 //System.out.println(movieList.get(position).getMovieTitle());
+                                System.out.println();
                                 Movie movie = movieList.get(position);
                                 Toast.makeText(getApplicationContext(), movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
 
