@@ -3,7 +3,9 @@ package com.example.viniciusgintern.popularmovies.model.TrailerModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Trailer {
+import java.io.Serializable;
+
+public class Trailer implements Serializable {
 
     @SerializedName("id")
     @Expose

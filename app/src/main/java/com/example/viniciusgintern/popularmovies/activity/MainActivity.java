@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
 
     /***************************************/
-    public final String APIKey = "Inserir a APIKey aqui";
+    public final String APIKey = "Digite a sua APIKey aqui";
     /***************************************/
 
     @Override

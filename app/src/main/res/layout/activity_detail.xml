@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -8,7 +8,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.DetailActivity">
+        tools:context=".activity.DetailActivity"
+        android:overScrollMode="never">
 
         <include android:id="@+id/mainToolbar"
             layout="@layout/toolbar_detail"/>
@@ -148,4 +149,4 @@
             app:layout_constraintTop_toBottomOf="@+id/textReviewTitle" />
 
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

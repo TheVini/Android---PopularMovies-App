@@ -1,5 +1,7 @@
 package com.example.viniciusgintern.popularmovies.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,22 +9,29 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
+import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
 import com.example.viniciusgintern.popularmovies.adapter.ReviewsListAdapter;
 import com.example.viniciusgintern.popularmovies.adapter.TrailersListAdapter;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
 import com.example.viniciusgintern.popularmovies.model.ReviewModel.ReviewResult;
 import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService2;
 import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService3;
+import com.example.viniciusgintern.popularmovies.model.TrailerModel.Trailer;
 import com.example.viniciusgintern.popularmovies.model.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,16 +63,6 @@ public class DetailActivity extends AppCompatActivity {
         if(myActionBar != null){
             myActionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        //Inicialização do Grid do Layout
-        //Trailers
-        RecyclerView.LayoutManager layoutManagerForTrailers = new GridLayoutManager(this,1);
-        this.mViewHolder.recyclerTrailers.setLayoutManager(layoutManagerForTrailers);
-        this.mViewHolder.recyclerTrailers.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
-        //Reviews
-        RecyclerView.LayoutManager layoutManagerForReviews = new GridLayoutManager(this,1);
-        this.mViewHolder.recyclerReviews.setLayoutManager(layoutManagerForReviews);
-        this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         //Criação do objeto retrofit para recuperar trailers
         this.mViewHolder.retrofitTrailer = new Retrofit.Builder()
@@ -127,6 +126,10 @@ public class DetailActivity extends AppCompatActivity {
     //Listagem dos trailers
     public void getTrailersFromApi(Movie movie, String APIKey){
 
+        //Inicialização do Grid do Layou para Trailers
+        this.mViewHolder.recyclerTrailers.setLayoutManager(new GridLayoutManager(this,1));
+        this.mViewHolder.recyclerTrailers.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
         RetrofitService2 service = this.mViewHolder.retrofitTrailer.create(RetrofitService2.class);
         Call<TrailerResult> call = service.getTrailers( movie.getId(), APIKey,"en-US", "1");
 
@@ -139,6 +142,8 @@ public class DetailActivity extends AppCompatActivity {
                         //Define adapter
                         TrailersListAdapter adapter = new TrailersListAdapter(result.getResults());
                         mViewHolder.recyclerTrailers.setAdapter(adapter);
+
+                        clickEventsCaller(result.getResults());
                     }
                 }
             }
@@ -154,6 +159,10 @@ public class DetailActivity extends AppCompatActivity {
 
     //Listagem dos reviews
     public void getReviewsFromAPI(Movie movie, String APIKey){
+        //Inicialização do Grid do Layou para Reviews
+        this.mViewHolder.recyclerReviews.setLayoutManager(new GridLayoutManager(this,1));
+        this.mViewHolder.recyclerReviews.setHasFixedSize(true);
+        this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         RetrofitService3 service = this.mViewHolder.retrofitReview.create(RetrofitService3.class);
         Call<ReviewResult> call = service.getReviews(movie.getId(),APIKey, "en-US", "1");
@@ -184,5 +193,35 @@ public class DetailActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //Evento de clique para execução dos trailers
+    private void clickEventsCaller(final List<Trailer> trailerList) {
+        //Evento de click em cada imagem
+        mViewHolder.recyclerTrailers.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        mViewHolder.recyclerTrailers,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                //System.out.println(movieList.get(position).getMovieTitle());
+                                System.out.println();
+                                Trailer trailer = trailerList.get(position);
+
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="+trailer.getKey())));
+                                Log.i("Video", "Video Playing....");
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            }
+                        }
+                )
+        );
     }
 }
