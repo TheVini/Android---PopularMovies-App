@@ -3,17 +3,30 @@ package com.example.viniciusgintern.popularmovies.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
+import com.example.viniciusgintern.popularmovies.adapter.ReviewsListAdapter;
+import com.example.viniciusgintern.popularmovies.adapter.TrailersListAdapter;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
+import com.example.viniciusgintern.popularmovies.model.ReviewModel.ReviewResult;
+import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService2;
+import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService3;
+import com.example.viniciusgintern.popularmovies.model.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -33,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.movieDescription = findViewById(R.id.movieDescription);
         this.mViewHolder.toolbar = findViewById(R.id.mainToolbar);
         this.mViewHolder.recyclerTrailers = findViewById(R.id.recyclerTrailers);
+        this.mViewHolder.recyclerReviews = findViewById(R.id.recyclerReviews);
         setSupportActionBar(this.mViewHolder.toolbar);
 
         //Cria a seta com clique na barra superior para voltar ao menu principal
@@ -41,8 +55,23 @@ public class DetailActivity extends AppCompatActivity {
             myActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //Criação do objeto retrofit para recuperar trailers e reviews
-        this.mViewHolder.retrofit = new Retrofit.Builder()
+        //Inicialização do Grid do Layout
+        //Trailers
+        RecyclerView.LayoutManager layoutManagerForTrailers = new GridLayoutManager(this,1);
+        this.mViewHolder.recyclerTrailers.setLayoutManager(layoutManagerForTrailers);
+        this.mViewHolder.recyclerTrailers.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        //Reviews
+        RecyclerView.LayoutManager layoutManagerForReviews = new GridLayoutManager(this,1);
+        this.mViewHolder.recyclerReviews.setLayoutManager(layoutManagerForReviews);
+        this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
+        //Criação do objeto retrofit para recuperar trailers
+        this.mViewHolder.retrofitTrailer = new Retrofit.Builder()
+                .baseUrl("http://api.themoviedb.org")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //Criação do objeto retrofit para recuperar reviews
+        this.mViewHolder.retrofitReview = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -50,6 +79,7 @@ public class DetailActivity extends AppCompatActivity {
         //Recuperar os dados enviados pela main
         Bundle dados = getIntent().getExtras();
         Movie movie = (Movie) dados.getSerializable("objeto");
+        String APIKey = (String) dados.getSerializable("APIKey");
 
         this.mViewHolder.movieTitle.setText(movie.getMovieTitle());
         this.mViewHolder.movieYear.setText(movie.getMovieYear().substring(0,4));
@@ -58,7 +88,9 @@ public class DetailActivity extends AppCompatActivity {
         Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieImageAddress()).into(this.mViewHolder.detailImage);
 
         //Carregamento dos trailers pela API
-        this.getMoviesFromApi();
+        this.getTrailersFromApi(movie, APIKey);
+        //Carregamento dos reviews pela API
+        this.getReviewsFromAPI(movie,APIKey);
     }
 
     //Método que executa a ação de voltar para o menu anterior
@@ -86,40 +118,71 @@ public class DetailActivity extends AppCompatActivity {
         TextView movieRate;
         TextView movieDescription;
         Toolbar toolbar;
-        RecyclerView recyclerTrailers;
-        Retrofit retrofit;
+        static RecyclerView recyclerTrailers;
+        static RecyclerView recyclerReviews;
+        Retrofit retrofitTrailer;
+        Retrofit retrofitReview;
     }
 
     //Listagem dos trailers
-    public void getMoviesFromApi(){
+    public void getTrailersFromApi(Movie movie, String APIKey){
 
-//        RetrofitService service = retrofit.create(RetrofitService.class);
-//        Call<Result> call = service.getMovies(APIKey);
-//
-//
-//        call.enqueue(new Callback<Result>() {
-//            @Override
-//            public void onResponse(Call<Result> call, Response<Result> response) {
-//                if (response.isSuccessful()) {
-//                    Result result = response.body();
-//                    if(result != null){
-//                        //Define adapter
-//                        MoviesListAdapter adapter = new MoviesListAdapter(result.getMovieList());
-//                        recyclerMovies.setAdapter(adapter);
-//
-//                        System.out.println(result.getMovieList());
-//                        clickEventsCaller(result.getMovieList());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Result> call, Throwable t) {
-//                Toast.makeText(MainActivity.this,
-//                        "Não foi possível realizar a requisição",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        RetrofitService2 service = this.mViewHolder.retrofitTrailer.create(RetrofitService2.class);
+        Call<TrailerResult> call = service.getTrailers( movie.getId(), APIKey,"en-US", "1");
+
+        call.enqueue(new Callback<TrailerResult>() {
+            @Override
+            public void onResponse(Call<TrailerResult> call, Response<TrailerResult> response) {
+                if (response.isSuccessful()) {
+                    TrailerResult result = response.body();
+                    if(result != null){
+                        //Define adapter
+                        TrailersListAdapter adapter = new TrailersListAdapter(result.getResults());
+                        mViewHolder.recyclerTrailers.setAdapter(adapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrailerResult> call, Throwable t) {
+                Toast.makeText(DetailActivity.this,
+                        "Não foi possível realizar a requisição",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    //Listagem dos reviews
+    public void getReviewsFromAPI(Movie movie, String APIKey){
+
+        RetrofitService3 service = this.mViewHolder.retrofitReview.create(RetrofitService3.class);
+        Call<ReviewResult> call = service.getReviews(movie.getId(),APIKey, "en-US", "1");
+
+        call.enqueue(new Callback<ReviewResult>() {
+            @Override
+            public void onResponse(Call<ReviewResult> call, Response<ReviewResult> response) {
+                if (response.isSuccessful()) {
+                    ReviewResult result = response.body();
+                    if(result != null){
+                        if(result.getResults().size() != 0){
+                            //Define adapter
+                            ReviewsListAdapter adapter = new ReviewsListAdapter(result.getResults());
+                            mViewHolder.recyclerReviews.setAdapter(adapter);
+                        }
+                        else{
+                            ReviewsListAdapter adapter = new ReviewsListAdapter();
+                            mViewHolder.recyclerReviews.setAdapter(adapter);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewResult> call, Throwable t) {
+                Toast.makeText(DetailActivity.this,
+                        "Não foi possível realizar a requisição",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

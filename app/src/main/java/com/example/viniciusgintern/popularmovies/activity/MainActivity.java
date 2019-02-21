@@ -17,8 +17,7 @@ import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
 import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
-import com.example.viniciusgintern.popularmovies.model.MovieModel.Result;
-import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitServiceClass;
+import com.example.viniciusgintern.popularmovies.model.MovieModel.MovieResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,29 +80,27 @@ public class MainActivity extends AppCompatActivity {
     //Aquisição de dados dos filmes
     public void getMoviesFromApi(){
 
-
         RetrofitService service = retrofit.create(RetrofitService.class);
-        Call<Result> call = service.getMovies(APIKey);
+        Call<MovieResult> call = service.getMovies(APIKey);
 
-
-        call.enqueue(new Callback<Result>() {
+        call.enqueue(new Callback<MovieResult>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
                 if (response.isSuccessful()) {
-                    Result result = response.body();
+                    MovieResult result = response.body();
                     if(result != null){
                         //Define adapter
                         MoviesListAdapter adapter = new MoviesListAdapter(result.getMovieList());
                         recyclerMovies.setAdapter(adapter);
 
-                        System.out.println(result.getMovieList());
+                        //System.out.println(result.getMovieList());
                         clickEventsCaller(result.getMovieList());
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<MovieResult> call, Throwable t) {
                 Toast.makeText(MainActivity.this,
                         "Não foi possível realizar a requisição",
                         Toast.LENGTH_SHORT).show();
@@ -128,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 
                                 intent.putExtra("objeto",movie);
+                                intent.putExtra("APIKey",APIKey);
 
                                 startActivity(intent);
                             }
