@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
 
     /***************************************/
-    public final String APIKey = "Digite a sua APIKey aqui";
+    public final String APIKey = "APIKey";
     /***************************************/
 
     @Override
@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
             imageAmount = 4;
         }
         //Inicialização do Grid do Layout
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,imageAmount);
-        recyclerMovies.setLayoutManager(layoutManager);
+        recyclerMovies.setLayoutManager(new GridLayoutManager(this,imageAmount));
 
         //Criação do objeto retrofit
         retrofit = new Retrofit.Builder()

@@ -126,7 +126,7 @@ public class DetailActivity extends AppCompatActivity {
     //Listagem dos trailers
     public void getTrailersFromApi(Movie movie, String APIKey){
 
-        //Inicialização do Grid do Layou para Trailers
+        //Inicialização do Grid do Layout para Trailers
         this.mViewHolder.recyclerTrailers.setLayoutManager(new GridLayoutManager(this,1));
         this.mViewHolder.recyclerTrailers.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
@@ -159,7 +159,7 @@ public class DetailActivity extends AppCompatActivity {
 
     //Listagem dos reviews
     public void getReviewsFromAPI(Movie movie, String APIKey){
-        //Inicialização do Grid do Layou para Reviews
+        //Inicialização do Grid do Layout para Reviews
         this.mViewHolder.recyclerReviews.setLayoutManager(new GridLayoutManager(this,1));
         this.mViewHolder.recyclerReviews.setHasFixedSize(true);
         this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
