@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerMovies;
     private Toolbar toolbar;
-    private List<Movie> movieList = new ArrayList<>();
     private Retrofit retrofit;
+    public FavoritePreferencies favoriteMovies;
 
     /***************************************/
-    public final String APIKey = "APIKey";
+    public final String APIKey = "Escreva a sua APIKEY aqui";
     /***************************************/
 
     @Override
@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         }
         //Inicialização do Grid do Layout
         recyclerMovies.setLayoutManager(new GridLayoutManager(this,imageAmount));
+
+        //Inicialização das preferências
+        favoriteMovies = new FavoritePreferencies(getApplicationContext());
 
         //Criação do objeto retrofit
         retrofit = new Retrofit.Builder()
@@ -92,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                         MoviesListAdapter adapter = new MoviesListAdapter(result.getMovieList());
                         recyclerMovies.setAdapter(adapter);
 
-                        //System.out.println(result.getMovieList());
                         clickEventsCaller(result.getMovieList());
                     }
                 }
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Listener para eventos de clique num filme
     private void clickEventsCaller(final List<Movie> movieList) {
         //Evento de click em cada imagem
         recyclerMovies.addOnItemTouchListener(
@@ -125,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 intent.putExtra("objeto",movie);
                                 intent.putExtra("APIKey",APIKey);
+                                //intent.putExtra("favMoviesList", favoriteMovies);
 
                                 startActivity(intent);
                             }

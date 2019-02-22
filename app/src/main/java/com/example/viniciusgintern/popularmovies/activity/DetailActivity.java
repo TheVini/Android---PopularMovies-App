@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.toolbar = findViewById(R.id.mainToolbar);
         this.mViewHolder.recyclerTrailers = findViewById(R.id.recyclerTrailers);
         this.mViewHolder.recyclerReviews = findViewById(R.id.recyclerReviews);
+        this.mViewHolder.favButton = findViewById(R.id.favButton);
         setSupportActionBar(this.mViewHolder.toolbar);
 
         //Cria a seta com clique na barra superior para voltar ao menu principal
@@ -77,8 +79,9 @@ public class DetailActivity extends AppCompatActivity {
 
         //Recuperar os dados enviados pela main
         Bundle dados = getIntent().getExtras();
-        Movie movie = (Movie) dados.getSerializable("objeto");
+        final Movie movie = (Movie) dados.getSerializable("objeto");
         String APIKey = (String) dados.getSerializable("APIKey");
+        //FavoritePreferencies favMoviesList = (FavoritePreferencies) dados.getSerializable("favMoviesList");
 
         this.mViewHolder.movieTitle.setText(movie.getMovieTitle());
         this.mViewHolder.movieYear.setText(movie.getMovieYear().substring(0,4));
@@ -90,6 +93,14 @@ public class DetailActivity extends AppCompatActivity {
         this.getTrailersFromApi(movie, APIKey);
         //Carregamento dos reviews pela API
         this.getReviewsFromAPI(movie,APIKey);
+        //Listener do Botão de Favoritos
+        this.mViewHolder.favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //FavMoviesList.saveMovieAsFavorite(movie);
+                Toast.makeText(getApplicationContext(),"Botão clicado",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //Método que executa a ação de voltar para o menu anterior
@@ -121,6 +132,7 @@ public class DetailActivity extends AppCompatActivity {
         static RecyclerView recyclerReviews;
         Retrofit retrofitTrailer;
         Retrofit retrofitReview;
+        Button favButton;
     }
 
     //Listagem dos trailers
