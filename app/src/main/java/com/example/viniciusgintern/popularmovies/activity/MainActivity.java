@@ -1,25 +1,28 @@
 package com.example.viniciusgintern.popularmovies.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
-import com.example.viniciusgintern.popularmovies.model.RretrofitService.RetrofitService;
+import com.example.viniciusgintern.popularmovies.model.RetrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.MovieResult;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerMovies;
     private Toolbar toolbar;
     private Retrofit retrofit;
-    public FavoritePreferencies favoriteMovies;
+    private SharedPreferences preferences;
 
     /***************************************/
-    public final String APIKey = "Escreva a sua APIKEY aqui";
+    public final String APIKey = "APIKey here";
     /***************************************/
 
     @Override
@@ -58,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
         //Inicialização do Grid do Layout
         recyclerMovies.setLayoutManager(new GridLayoutManager(this,imageAmount));
 
-        //Inicialização das preferências
-        favoriteMovies = new FavoritePreferencies(getApplicationContext());
-
         //Criação do objeto retrofit
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org")
@@ -69,6 +69,17 @@ public class MainActivity extends AppCompatActivity {
 
         //Carregamento dos dados pela API
         this.getMoviesFromApi();
+    }
+
+    //Método que executa a ação de ir para a tela de favoritos
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.PopMovies){
+            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+            startActivity(intent);
+            //Toast.makeText(getApplicationContext(),"Fui clicado",Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //Trecho de exibição do menu superior
@@ -120,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(View view, int position) {
                                 //System.out.println(movieList.get(position).getMovieTitle());
-                                System.out.println();
                                 Movie movie = movieList.get(position);
                                 Toast.makeText(getApplicationContext(), movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
 
@@ -128,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 intent.putExtra("objeto",movie);
                                 intent.putExtra("APIKey",APIKey);
-                                //intent.putExtra("favMoviesList", favoriteMovies);
 
                                 startActivity(intent);
                             }

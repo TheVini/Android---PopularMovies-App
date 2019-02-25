@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
+    <!--<item
         android:id="@+id/PopMovies"
-        android:title="Test"
-        app:showAsAction="never"/>
+        android:title="Favorites"
+        app:showAsAction="never"/>-->
 </menu>

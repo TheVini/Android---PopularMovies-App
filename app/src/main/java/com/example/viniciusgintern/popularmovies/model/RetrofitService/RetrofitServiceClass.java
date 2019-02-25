@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.model.RretrofitService;
+package com.example.viniciusgintern.popularmovies.model.RetrofitService;
 
 import com.example.viniciusgintern.popularmovies.model.MovieModel.MovieResult;
 
