@@ -9,6 +9,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie implements Serializable {
 
+    public Movie(Integer voteCount, Integer id, Boolean video, Double movieRate, String movieTitle, Double popularity, String movieImageAddress, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, Boolean adult, String movieDescription, String movieYear) {
+        this.voteCount = voteCount;
+        this.id = id;
+        this.video = video;
+        this.movieRate = movieRate;
+        this.movieTitle = movieTitle;
+        this.popularity = popularity;
+        this.movieImageAddress = movieImageAddress;
+        this.originalLanguage = originalLanguage;
+        this.originalTitle = originalTitle;
+        this.genreIds = genreIds;
+        this.backdropPath = backdropPath;
+        this.adult = adult;
+        this.movieDescription = movieDescription;
+        this.movieYear = movieYear;
+    }
+
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;

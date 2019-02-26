@@ -32,6 +32,7 @@ import com.example.viniciusgintern.popularmovies.model.TrailerModel.Trailer;
 import com.example.viniciusgintern.popularmovies.model.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -96,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
         this.getReviewsFromAPI(movie,APIKey);
 
         //Definir texto do botão
-//        if(mViewHolder.favoriteMovies.getFavoriteMovies()){
+//        if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
 //            mViewHolder.favButton.setText("ALREADY FAVORITE");
 //        };
 
@@ -104,8 +105,17 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewHolder.favoriteMovies.saveMovieAsFavorite(movie);
-                //Toast.makeText(getApplicationContext(),"Saved as favorite",Toast.LENGTH_SHORT).show();
+
+//                if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
+//                    mViewHolder.favoriteMovies.removeMovieFromFavList(movie);
+//                    Toast.makeText(getApplicationContext(),"Removed from favorite",Toast.LENGTH_SHORT).show();
+//                    mViewHolder.favButton.setText("MAKE AS FAVORITE");
+//                }
+//                else {
+//                    mViewHolder.favoriteMovies.saveMovieAsFavorite(movie);
+//                    Toast.makeText(getApplicationContext(),"Saved as favorite",Toast.LENGTH_SHORT).show();
+//                    mViewHolder.favButton.setText("ALREADY FAVORITE");
+//                }
             }
         });
     }

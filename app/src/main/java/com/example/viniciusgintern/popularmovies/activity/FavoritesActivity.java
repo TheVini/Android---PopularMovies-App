@@ -11,6 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.viniciusgintern.popularmovies.R;
+import com.example.viniciusgintern.popularmovies.adapter.FavoriteMoviesListAdapter;
+import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
+import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -20,6 +26,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerFavorites;
     private Retrofit retrofit;
+    private FavoritePreferencies favoriteMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +58,11 @@ public class FavoritesActivity extends AppCompatActivity {
                 .baseUrl("http://api.themoviedb.org")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+        //Adapter para a exibição dos filmes favoritos
+        /*FavoriteMoviesListAdapter adapter = new FavoriteMoviesListAdapter(favoriteMovies.favMovieList);
+        recyclerFavorites.setAdapter(adapter);*/
+
     }
 
     //Método que executa a ação de voltar para o menu anterior

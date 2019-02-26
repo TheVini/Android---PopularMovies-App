@@ -36,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerMovies;
     private Toolbar toolbar;
     private Retrofit retrofit;
-    private SharedPreferences preferences;
+    private FavoritePreferencies favoriteMovies;
 
     /***************************************/
-    public final String APIKey = "APIKey here";
+    public final String APIKey = "APIKey aqui";
     /***************************************/
 
     @Override
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Carregamento dos dados pela API
         this.getMoviesFromApi();
+
     }
 
     //Método que executa a ação de ir para a tela de favoritos
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.PopMovies){
             Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
             startActivity(intent);
-            //Toast.makeText(getApplicationContext(),"Fui clicado",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
