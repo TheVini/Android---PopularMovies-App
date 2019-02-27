@@ -2,6 +2,7 @@ package com.example.viniciusgintern.popularmovies.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
 import com.google.gson.Gson;
@@ -16,6 +17,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FavoritePreferencies {
     private Context context;
@@ -32,85 +35,26 @@ public class FavoritePreferencies {
 /*        editor.clear();
         editor.commit();
         System.out.println("Tamanho do preferences " + preferences.getAll());*/
-    }
+}
 
-    public void saveMovieAsFavorite(Movie movie){
-        Gson gson = new Gson();
-        String json = gson.toJson(movie);
-        editor.putString(movie.getId().toString(), json);
-        editor.commit();
-    }
-
-    /*public List<Movie> getFavoriteMovies(){
-
-        String jsonString = preferences.getAll().values().toString();
-        Type type = new TypeToken< List < Movie >>() {}.getType();
-        favMovieList = new Gson().fromJson(jsonString, type);
-        if(favMovieList != null) {
-            return favMovieList;
-        }
-        else{
-            return new ArrayList<>();
-        }
-
-        //System.out.println(jsonString);
-        //System.out.println(jsonString.length());
-
-        *//*JsonParser parser = new JsonParser();
-        JsonArray jsonArray = (JsonArray) parser.parse(jsonString);
-        Iterator<JsonElement> iterator = jsonArray.iterator();
-        List<Object> list = new ArrayList<>();
-        while(iterator.hasNext()){
-            list.add(new Gson().fromJson(iterator.next(), Movie.class));
-        }
-
-        //System.out.println("O tipo da variável é " + list.getClass().getName());
-        System.out.println(list);
-
-        List<Movie> favMovieList = new ArrayList<>();
-
-        if(list != null || list.size()>0) {
-            for (Object movie : list
-            ) {
-                favMovieList.add((Movie) movie);
-            }
-            return favMovieList;
-        }
-        else{
-            System.out.println("Lista vazia " + Collections.EMPTY_LIST);
-            return Collections.EMPTY_LIST;
-        }*//*
-    }*/
-
-    /*public Boolean containMovieInFavList(Movie movie){
-        Boolean Target = false;
-        List<Movie> favoriteList = getFavoriteMovies();
-        for (Movie favMovie: favoriteList
-             ) {
-            if(favMovie.getId().intValue() == movie.getId().intValue() ){
-                Target = true;
-            }
-        }
-
-        return Target;
-    }*/
-
-    /*public void removeMovieFromFavList(Movie movie){
-        List<Movie> favoriteList = getFavoriteMovies();
-        List<Movie> filteredList = new ArrayList<>();
-
-        for (Movie favMovie: favoriteList
-        ) {
-            if((favMovie.getId().intValue() != movie.getId().intValue() )){
-                filteredList.add(favMovie);
-            }
-        }
-        editor.clear();
+    public void saveMovieAsFavorite(Integer movieID){
+        editor.putInt(movieID.toString(),movieID);
         editor.commit();
 
-        for (Movie favMovie: filteredList
-        ) {
-            saveMovieAsFavorite(favMovie);
+        System.out.println("Tamanho do preferences depois de acrescido: " + preferences.getAll());
+    }
+
+    public Boolean containMovieInFavList(Integer movieID){
+        if(preferences.getAll().containsKey(movieID.toString())){
+            return true;
         }
-    }*/
+        return false;
+    }
+
+    public void removeMovieFromFavList(Integer movieID){
+        editor.remove(movieID.toString());
+        editor.commit();
+
+        System.out.println("Tamanho do preferences depois de removido: " + preferences.getAll());
+    }
 }

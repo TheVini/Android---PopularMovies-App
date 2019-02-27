@@ -3,6 +3,7 @@ package com.example.viniciusgintern.popularmovies.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private FavoritePreferencies favoriteMovies;
 
     /***************************************/
-    public final String APIKey = "APIKey aqui";
+    public final String APIKey = "API KEY aqui";
     /***************************************/
 
     @Override

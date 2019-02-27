@@ -9,9 +9,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie implements Serializable {
 
-    public Movie(Integer voteCount, Integer id, Boolean video, Double movieRate, String movieTitle, Double popularity, String movieImageAddress, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, Boolean adult, String movieDescription, String movieYear) {
+    public Movie(Integer voteCount, Integer movieId, Boolean video, Double movieRate, String movieTitle, Double popularity, String movieImageAddress, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, Boolean adult, String movieDescription, String movieYear) {
         this.voteCount = voteCount;
-        this.id = id;
+        this.movieId = movieId;
         this.video = video;
         this.movieRate = movieRate;
         this.movieTitle = movieTitle;
@@ -31,7 +31,7 @@ public class Movie implements Serializable {
     private Integer voteCount;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Integer movieId;
     @SerializedName("video")
     @Expose
     private Boolean video;
@@ -77,12 +77,12 @@ public class Movie implements Serializable {
         this.voteCount = voteCount;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getMovieId() {
+        return movieId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
     }
 
     public Boolean getVideo() {

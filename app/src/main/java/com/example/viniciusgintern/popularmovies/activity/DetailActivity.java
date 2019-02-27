@@ -97,25 +97,25 @@ public class DetailActivity extends AppCompatActivity {
         this.getReviewsFromAPI(movie,APIKey);
 
         //Definir texto do botão
-//        if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
-//            mViewHolder.favButton.setText("ALREADY FAVORITE");
-//        };
+        if(mViewHolder.favoriteMovies.containMovieInFavList(movie.getMovieId())){
+            mViewHolder.favButton.setText("ALREADY FAVORITE");
+        };
 
         //Listener do Botão de Favoritos
         this.mViewHolder.favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
-//                    mViewHolder.favoriteMovies.removeMovieFromFavList(movie);
-//                    Toast.makeText(getApplicationContext(),"Removed from favorite",Toast.LENGTH_SHORT).show();
-//                    mViewHolder.favButton.setText("MAKE AS FAVORITE");
-//                }
-//                else {
-//                    mViewHolder.favoriteMovies.saveMovieAsFavorite(movie);
-//                    Toast.makeText(getApplicationContext(),"Saved as favorite",Toast.LENGTH_SHORT).show();
-//                    mViewHolder.favButton.setText("ALREADY FAVORITE");
-//                }
+                if(mViewHolder.favoriteMovies.containMovieInFavList(movie.getMovieId())){
+                    mViewHolder.favoriteMovies.removeMovieFromFavList(movie.getMovieId());
+                    Toast.makeText(getApplicationContext(),"Removed from favorites",Toast.LENGTH_SHORT).show();
+                    mViewHolder.favButton.setText("MAKE AS FAVORITE");
+                }
+                else {
+                    mViewHolder.favoriteMovies.saveMovieAsFavorite(movie.getMovieId());
+                    Toast.makeText(getApplicationContext(),"Saved as favorite",Toast.LENGTH_SHORT).show();
+                    mViewHolder.favButton.setText("ALREADY FAVORITE");
+                }
             }
         });
     }
@@ -124,7 +124,8 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            onBackPressed();
+            //onBackPressed();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -160,7 +161,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerTrailers.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         RetrofitService2 service = this.mViewHolder.retrofitTrailer.create(RetrofitService2.class);
-        Call<TrailerResult> call = service.getTrailers( movie.getId(), APIKey,"en-US", "1");
+        Call<TrailerResult> call = service.getTrailers( movie.getMovieId(), APIKey,"en-US", "1");
 
         call.enqueue(new Callback<TrailerResult>() {
             @Override
@@ -194,7 +195,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         RetrofitService3 service = this.mViewHolder.retrofitReview.create(RetrofitService3.class);
-        Call<ReviewResult> call = service.getReviews(movie.getId(),APIKey, "en-US", "1");
+        Call<ReviewResult> call = service.getReviews(movie.getMovieId(),APIKey, "en-US", "1");
 
         call.enqueue(new Callback<ReviewResult>() {
             @Override
