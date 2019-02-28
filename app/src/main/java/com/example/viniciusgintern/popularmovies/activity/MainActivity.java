@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private FavoritePreferencies favoriteMovies;
 
     /***************************************/
-    public final String APIKey = "API KEY aqui";
+    public final String APIKey = "API Key here";
     /***************************************/
 
     @Override

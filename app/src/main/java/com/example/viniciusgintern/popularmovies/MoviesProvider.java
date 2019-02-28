@@ -36,7 +36,9 @@ public class MoviesProvider extends ContentProvider {
     static final UriMatcher uriMatcher;
     static{
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        //Isto abaixo mira na tabela inteira
         uriMatcher.addURI(PROVIDER_NAME, "movies", MOVIE);
+        //Isto abaixo é capaz de mirar numa única linha
         uriMatcher.addURI(PROVIDER_NAME, "movies/#", MOVIE_ID);
     }
 
@@ -74,6 +76,7 @@ public class MoviesProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         Context context = getContext();
+
         DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         /**
