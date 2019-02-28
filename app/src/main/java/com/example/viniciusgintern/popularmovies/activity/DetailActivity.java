@@ -1,5 +1,7 @@
 package com.example.viniciusgintern.popularmovies.activity;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.viniciusgintern.popularmovies.data.MoviesProvider;
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
 import com.example.viniciusgintern.popularmovies.adapter.ReviewsListAdapter;
@@ -32,7 +35,6 @@ import com.example.viniciusgintern.popularmovies.model.TrailerModel.Trailer;
 import com.example.viniciusgintern.popularmovies.model.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -97,7 +99,7 @@ public class DetailActivity extends AppCompatActivity {
         this.getReviewsFromAPI(movie,APIKey);
 
         //Definir texto do botão
-        if(mViewHolder.favoriteMovies.containMovieInFavList(movie.getMovieId())){
+        if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
             mViewHolder.favButton.setText("ALREADY FAVORITE");
         };
 
@@ -106,15 +108,30 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(mViewHolder.favoriteMovies.containMovieInFavList(movie.getMovieId())){
-                    mViewHolder.favoriteMovies.removeMovieFromFavList(movie.getMovieId());
+                if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
+                    mViewHolder.favoriteMovies.removeMovieFromFavList(movie);
                     Toast.makeText(getApplicationContext(),"Removed from favorites",Toast.LENGTH_SHORT).show();
                     mViewHolder.favButton.setText("MAKE AS FAVORITE");
+
+//                    String URI = "content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/" + movie.getMovieId().toString();
+//                    Uri movieToDelete = Uri.parse(URI);
+//                    getContentResolver().delete(movieToDelete,MoviesProvider.MOVIEID, null);
+
                 }
                 else {
-                    mViewHolder.favoriteMovies.saveMovieAsFavorite(movie.getMovieId());
+                    mViewHolder.favoriteMovies.saveMovieAsFavorite(movie);
                     Toast.makeText(getApplicationContext(),"Saved as favorite",Toast.LENGTH_SHORT).show();
                     mViewHolder.favButton.setText("ALREADY FAVORITE");
+
+                    ContentValues values = new ContentValues();
+                    values.put(MoviesProvider.MOVIEID, movie.getMovieId());
+                    values.put(MoviesProvider.MOVIETITLE , movie.getMovieTitle());
+                    values.put(MoviesProvider.MOVIEYEAR, movie.getMovieYear());
+                    values.put(MoviesProvider.MOVIERATE , movie.getMovieRate());
+                    values.put(MoviesProvider.MOVIEDESCRIPTION , movie.getMovieDescription());
+                    values.put(MoviesProvider.MOVIEIMAGEADDRESS , movie.getMovieImageAddress());
+                    getContentResolver().insert(MoviesProvider.CONTENT_URI, values);
+
                 }
             }
         });

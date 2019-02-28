@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.viniciusgintern.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,8 +11,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activity.FavoritesActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.FavoritesActivity" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +22,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetailActivity" />
+        <provider
+            android:name=".data.MoviesProvider"
+            android:authorities="com.example.viniciusgintern.popularmovies.data.MoviesProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
