@@ -21,13 +21,14 @@ public class MoviesProvider extends ContentProvider {
     static final String AUTHORITY = "com.example.viniciusgintern.popularmovies.data.MoviesProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/favorites");
 
-    static final String _ID = "_id";
+    public static final String _ID = "_id";
     public static final String MOVIEID = "movieId";
     public static final String MOVIETITLE = "movieTitle";
     public static final String MOVIEYEAR = "movieYear";
     public static final String MOVIERATE = "movieRate";
     public static final String MOVIEDESCRIPTION = "movieDescription";
     public static final String MOVIEIMAGEADDRESS = "movieImageAddress";
+    public static final String MOVIEBACKDROPPATH = "movieBackdropPath";
 
     private static HashMap<String, String> MOVIES_PROJECTION_MAP;
 
@@ -46,11 +47,19 @@ public class MoviesProvider extends ContentProvider {
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "Movies";
     static final String MOVIES_TABLE_NAME = "favorites";
-    private static final String CREATE_DB_TABLE = " CREATE TABLE " + MOVIES_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + " movieId INTEGER NOT NULL," + " movieTitle TEXT NOT NULL, " + " movieYear TEXT NOT NULL," + " movieRate REAL NOT NULL," + " movieDescription TEXT NOT NULL," + " movieImageAddress TEXT NOT NULL);";
+    private static final String CREATE_DB_TABLE = " CREATE TABLE " +
+            MOVIES_TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " movieId INTEGER NOT NULL," +
+            " movieTitle TEXT NOT NULL, " +
+            " movieYear TEXT NOT NULL," +
+            " movieRate REAL NOT NULL," +
+            " movieDescription TEXT NOT NULL," +
+            " movieImageAddress TEXT NOT NULL," +
+            " movieBackdropPath TEXT NOT NULL);";
 
     protected static final class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context){
-            super(context, DATABASE_NAME, null, 2);
+            super(context, DATABASE_NAME, null, 3);
         }
 
         @Override
@@ -77,9 +86,7 @@ public class MoviesProvider extends ContentProvider {
 
         long rowID = db.insert(	MOVIES_TABLE_NAME, "", values);
 
-        if(rowID > 0){
-            return ContentUris.withAppendedId(CONTENT_URI, rowID);
-        }
+        if(rowID > 0){ return ContentUris.withAppendedId(CONTENT_URI, rowID); }
 
         return null;
     }
@@ -100,15 +107,9 @@ public class MoviesProvider extends ContentProvider {
                 break;
 
             default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-
-        if (sortOrder == null || sortOrder == ""){
-            sortOrder = MOVIEID;
-        }
-
-        Cursor c = qb.query(db,	projection,	selection, selectionArgs,null, null, sortOrder);
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-
+        Cursor c = qb.query(db,	projection,	selection, selectionArgs,null, null, null);
         return c;
     }
 
@@ -119,7 +120,8 @@ public class MoviesProvider extends ContentProvider {
                 return db.delete(MOVIES_TABLE_NAME, selection, selectionArgs);
 
             case MOVIE_ID:
-                selection = MoviesProvider.MOVIEID ;
+                //selection = MoviesProvider.MOVIEID ;
+                selection = MoviesProvider.MOVIEID + " LIKE ? ";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return db.delete( MOVIES_TABLE_NAME, selection, selectionArgs);
             default:

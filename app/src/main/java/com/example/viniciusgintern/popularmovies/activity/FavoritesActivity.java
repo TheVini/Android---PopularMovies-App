@@ -1,6 +1,9 @@
 package com.example.viniciusgintern.popularmovies.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
+import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
 import com.example.viniciusgintern.popularmovies.adapter.FavoriteMoviesListAdapter;
 import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
+import com.example.viniciusgintern.popularmovies.data.MoviesProvider;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
 
 import java.util.ArrayList;
@@ -59,10 +67,8 @@ public class FavoritesActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        //Adapter para a exibição dos filmes favoritos
-        /*FavoriteMoviesListAdapter adapter = new FavoriteMoviesListAdapter(favoriteMovies.favMovieList);
-        recyclerFavorites.setAdapter(adapter);*/
-
+        //Carregamento dos dados do banco
+        this.getDataFromBD();
     }
 
     //Método que executa a ação de voltar para o menu anterior
@@ -81,5 +87,61 @@ public class FavoritesActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
+    }
+
+    //Aquisição de dados dos filmes do BD
+    public void getDataFromBD() {
+        //Trecho só para exibir os filmes que estão no banco
+        Uri movies = Uri.parse("content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/favorites");
+        Cursor c = getContentResolver().query(movies,null,null,null, null) ;
+
+        FavoriteMoviesListAdapter adapter = new FavoriteMoviesListAdapter(c);
+        recyclerFavorites.setAdapter(adapter);
+
+        clickEventsCaller(c);
+    }
+
+    //Listener para eventos de clique num filme
+    private void clickEventsCaller(final Cursor cursor) {
+        recyclerFavorites.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        recyclerFavorites,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                cursor.moveToPosition(position);
+                                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIETITLE)),Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+
+                                System.out.println(cursor.getInt(cursor.getColumnIndex(MoviesProvider.MOVIERATE)));
+
+                                Movie movieToSend = new Movie(cursor.getInt(cursor.getColumnIndex(MoviesProvider.MOVIEID)),
+                                        cursor.getDouble(cursor.getColumnIndex(MoviesProvider.MOVIERATE)),
+                                        cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIETITLE)),
+                                        cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIEIMAGEADDRESS)),
+                                        cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIEDESCRIPTION)),
+                                        cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIEYEAR)),
+                                        cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIEBACKDROPPATH)));
+
+                                intent.putExtra("objeto",movieToSend);
+
+                                startActivity(intent);
+
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                cursor.moveToPosition(position);
+                                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex(MoviesProvider.MOVIETITLE)),Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
     }
 }

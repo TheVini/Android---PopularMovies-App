@@ -3,6 +3,7 @@ package com.example.viniciusgintern.popularmovies.activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.viniciusgintern.popularmovies.Config;
 import com.example.viniciusgintern.popularmovies.data.MoviesProvider;
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
@@ -84,19 +86,18 @@ public class DetailActivity extends AppCompatActivity {
         //Recuperar os dados enviados pela main
         Bundle dados = getIntent().getExtras();
         final Movie movie = (Movie) dados.getSerializable("objeto");
-        String APIKey = (String) dados.getSerializable("APIKey");
-
 
         this.mViewHolder.movieTitle.setText(movie.getMovieTitle());
         this.mViewHolder.movieYear.setText(movie.getMovieYear().substring(0,4));
         this.mViewHolder.movieRate.setText(movie.getMovieRate().toString() + "/10");
         this.mViewHolder.movieDescription.setText(movie.getMovieDescription());
         Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieImageAddress()).into(this.mViewHolder.detailImage);
+        //Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieBackdropPath()).into(this.mViewHolder.toolbar);
 
         //Carregamento dos trailers pela API
-        this.getTrailersFromApi(movie, APIKey);
+        this.getTrailersFromApi(movie, Config.TMDBApiKey);
         //Carregamento dos reviews pela API
-        this.getReviewsFromAPI(movie,APIKey);
+        this.getReviewsFromAPI(movie,Config.TMDBApiKey);
 
         //Definir texto do botão
         if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
@@ -113,10 +114,9 @@ public class DetailActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Removed from favorites",Toast.LENGTH_SHORT).show();
                     mViewHolder.favButton.setText("MAKE AS FAVORITE");
 
-//                    String URI = "content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/" + movie.getMovieId().toString();
-//                    Uri movieToDelete = Uri.parse(URI);
-//                    getContentResolver().delete(movieToDelete,MoviesProvider.MOVIEID, null);
-
+                    String[] mSelectionArgs = {movie.getMovieId().toString()};
+                    Uri targetTable = Uri.parse("content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/favorites/" + movie.getMovieId().toString());
+                    getContentResolver().delete(targetTable,MoviesProvider.MOVIEID, mSelectionArgs);
                 }
                 else {
                     mViewHolder.favoriteMovies.saveMovieAsFavorite(movie);
@@ -130,7 +130,20 @@ public class DetailActivity extends AppCompatActivity {
                     values.put(MoviesProvider.MOVIERATE , movie.getMovieRate());
                     values.put(MoviesProvider.MOVIEDESCRIPTION , movie.getMovieDescription());
                     values.put(MoviesProvider.MOVIEIMAGEADDRESS , movie.getMovieImageAddress());
+                    values.put(MoviesProvider.MOVIEBACKDROPPATH, movie.getMovieBackdropPath());
                     getContentResolver().insert(MoviesProvider.CONTENT_URI, values);
+
+                    //Trecho só para exibir os filmes que estão no banco via prompt
+/*                    Uri movies = Uri.parse("content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/favorites");
+                    Cursor c = getContentResolver().query(movies,null,null,null, null) ;
+
+                    if (c.moveToFirst()) {
+                        do{
+                            Toast.makeText(getApplicationContext(), c.getString(c.getColumnIndex(MoviesProvider._ID)) + " , " +
+                                    c.getString(c.getColumnIndex(MoviesProvider.MOVIETITLE)),
+                                    Toast.LENGTH_SHORT).show();
+                        } while (c.moveToNext());
+                    }*/
 
                 }
             }

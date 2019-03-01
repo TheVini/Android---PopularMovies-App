@@ -9,21 +9,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie implements Serializable {
 
-    public Movie(Integer voteCount, Integer movieId, Boolean video, Double movieRate, String movieTitle, Double popularity, String movieImageAddress, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, Boolean adult, String movieDescription, String movieYear) {
-        this.voteCount = voteCount;
+    public Movie( Integer movieId, Double movieRate, String movieTitle, String movieImageAddress, String movieDescription, String movieYear, String movieBackdropPath) {
         this.movieId = movieId;
-        this.video = video;
         this.movieRate = movieRate;
         this.movieTitle = movieTitle;
-        this.popularity = popularity;
         this.movieImageAddress = movieImageAddress;
-        this.originalLanguage = originalLanguage;
-        this.originalTitle = originalTitle;
-        this.genreIds = genreIds;
-        this.backdropPath = backdropPath;
-        this.adult = adult;
         this.movieDescription = movieDescription;
         this.movieYear = movieYear;
+        this.movieBackdropPath = movieBackdropPath;
     }
 
     @SerializedName("vote_count")
@@ -58,7 +51,7 @@ public class Movie implements Serializable {
     private List<Integer> genreIds = null;
     @SerializedName("backdrop_path")
     @Expose
-    private String backdropPath;
+    private String movieBackdropPath;
     @SerializedName("adult")
     @Expose
     private Boolean adult;
@@ -149,12 +142,12 @@ public class Movie implements Serializable {
         this.genreIds = genreIds;
     }
 
-    public String getBackdropPath() {
-        return backdropPath;
+    public String getMovieBackdropPath() {
+        return movieBackdropPath;
     }
 
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
+    public void setMovieBackdropPath(String movieBackdropPath) {
+        this.movieBackdropPath = movieBackdropPath;
     }
 
     public Boolean getAdult() {

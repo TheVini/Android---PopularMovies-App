@@ -1,10 +1,7 @@
 package com.example.viniciusgintern.popularmovies.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.example.viniciusgintern.popularmovies.Config;
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
 import com.example.viniciusgintern.popularmovies.model.RetrofitService.RetrofitService;
@@ -23,7 +21,6 @@ import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
 import com.example.viniciusgintern.popularmovies.model.MovieModel.MovieResult;
 
-import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Retrofit retrofit;
     private FavoritePreferencies favoriteMovies;
-
-    /***************************************/
-    public final String APIKey = "API Key aqui";
-    /***************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     public void getMoviesFromApi(){
 
         RetrofitService service = retrofit.create(RetrofitService.class);
-        Call<MovieResult> call = service.getMovies(APIKey);
+        Call<MovieResult> call = service.getMovies(Config.TMDBApiKey);
 
         call.enqueue(new Callback<MovieResult>() {
             @Override
@@ -136,10 +129,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-
                                 intent.putExtra("objeto",movie);
-                                intent.putExtra("APIKey",APIKey);
-
                                 startActivity(intent);
                             }
 
