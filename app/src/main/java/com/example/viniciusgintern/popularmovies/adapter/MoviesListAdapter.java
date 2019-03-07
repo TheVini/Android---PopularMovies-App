@@ -35,7 +35,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         Movie movie = moviesList.get(i);
-        Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieImageAddress()).into(myViewHolder.movieImage);
+        Picasso.get().load("http://image.tmdb.org/t/p/w342/" + movie.getMovieImageAddress()).into(myViewHolder.movieImage);
     }
 
     //Componente que define o tamanho da lista que sera retornada

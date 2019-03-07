@@ -54,8 +54,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        this.mViewHolder.main_toolbar = findViewById(R.id.main_toolbar);
         this.mViewHolder.detailImage = findViewById(R.id.detailImage);
-        this.mViewHolder.movieTitle = findViewById(R.id.movieTitle);
+        this.mViewHolder.main_backdrop = findViewById(R.id.main_backdrop);
         this.mViewHolder.movieYear = findViewById(R.id.movieYear);
         this.mViewHolder.movieRate = findViewById(R.id.movieRate);
         this.mViewHolder.movieDescription = findViewById(R.id.movieDescription);
@@ -64,7 +65,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerReviews = findViewById(R.id.recyclerReviews);
         this.mViewHolder.favButton = findViewById(R.id.favButton);
         this.mViewHolder.favoriteMovies = new FavoritePreferencies(getApplicationContext());
-        setSupportActionBar(this.mViewHolder.toolbar);
+        setSupportActionBar(this.mViewHolder.main_toolbar);
 
         //Cria a seta com clique na barra superior para voltar ao menu principal
         ActionBar myActionBar = getSupportActionBar();
@@ -87,11 +88,12 @@ public class DetailActivity extends AppCompatActivity {
         Bundle dados = getIntent().getExtras();
         final Movie movie = (Movie) dados.getSerializable("objeto");
 
-        this.mViewHolder.movieTitle.setText(movie.getMovieTitle());
+        this.mViewHolder.main_toolbar.setTitle(movie.getMovieTitle());
         this.mViewHolder.movieYear.setText(movie.getMovieYear().substring(0,4));
         this.mViewHolder.movieRate.setText(movie.getMovieRate().toString() + "/10");
         this.mViewHolder.movieDescription.setText(movie.getMovieDescription());
-        Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieImageAddress()).into(this.mViewHolder.detailImage);
+        Picasso.get().load("http://image.tmdb.org/t/p/w342/" + movie.getMovieImageAddress()).into(this.mViewHolder.detailImage);
+        Picasso.get().load("http://image.tmdb.org/t/p/w500/" + movie.getMovieBackdropPath()).into(this.mViewHolder.main_backdrop);
         //Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieBackdropPath()).into(this.mViewHolder.toolbar);
 
         //Carregamento dos trailers pela API
@@ -170,10 +172,11 @@ public class DetailActivity extends AppCompatActivity {
 
     private static class ViewHolder{
         ImageView detailImage;
-        TextView movieTitle;
+        ImageView main_backdrop;
         TextView movieYear;
         TextView movieRate;
         TextView movieDescription;
+        Toolbar main_toolbar;
         Toolbar toolbar;
         static RecyclerView recyclerTrailers;
         static RecyclerView recyclerReviews;
