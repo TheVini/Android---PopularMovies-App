@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -60,7 +62,6 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.movieYear = findViewById(R.id.movieYear);
         this.mViewHolder.movieRate = findViewById(R.id.movieRate);
         this.mViewHolder.movieDescription = findViewById(R.id.movieDescription);
-        this.mViewHolder.toolbar = findViewById(R.id.mainToolbar);
         this.mViewHolder.recyclerTrailers = findViewById(R.id.recyclerTrailers);
         this.mViewHolder.recyclerReviews = findViewById(R.id.recyclerReviews);
         this.mViewHolder.favButton = findViewById(R.id.favButton);
@@ -94,7 +95,6 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.movieDescription.setText(movie.getMovieDescription());
         Picasso.get().load("http://image.tmdb.org/t/p/w342/" + movie.getMovieImageAddress()).into(this.mViewHolder.detailImage);
         Picasso.get().load("http://image.tmdb.org/t/p/w500/" + movie.getMovieBackdropPath()).into(this.mViewHolder.main_backdrop);
-        //Picasso.get().load("http://image.tmdb.org/t/p/w185/" + movie.getMovieBackdropPath()).into(this.mViewHolder.toolbar);
 
         //Carregamento dos trailers pela API
         this.getTrailersFromApi(movie, Config.TMDBApiKey);
@@ -159,6 +159,18 @@ public class DetailActivity extends AppCompatActivity {
             //onBackPressed();
             finish();
         }
+        /**********/
+        //Em teste
+        else if(itemId == R.id.menu_item_share){
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Your body here";
+            String shareSub = "Your subject here";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share using"));
+        }
+        /**********/
         return super.onOptionsItemSelected(item);
     }
 
@@ -167,6 +179,13 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem movieShare = menu.findItem(R.id.menu_item_share);
+        // Fetch and store ShareActionProvider
+        this.mViewHolder.shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(movieShare);
+        this.mViewHolder.shareButton = findViewById(R.id.menu_item_share);
+
         return true;
     }
 
@@ -177,13 +196,14 @@ public class DetailActivity extends AppCompatActivity {
         TextView movieRate;
         TextView movieDescription;
         Toolbar main_toolbar;
-        Toolbar toolbar;
         static RecyclerView recyclerTrailers;
         static RecyclerView recyclerReviews;
         Retrofit retrofitTrailer;
         Retrofit retrofitReview;
         Button favButton;
+        Button shareButton;
         FavoritePreferencies favoriteMovies;
+        ShareActionProvider shareActionProvider;
     }
 
     //Listagem dos trailers

@@ -11,20 +11,6 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <!--<TextView
-            android:id="@+id/movieTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorLight"
-            android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="Movie Name"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />-->
-
         <ImageView
             android:id="@+id/detailImage"
             android:layout_width="180dp"
