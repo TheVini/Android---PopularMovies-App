@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -50,6 +51,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailActivity extends AppCompatActivity {
 
     private ViewHolder mViewHolder = new ViewHolder();
+    private String movieTrailerToShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,43 +137,29 @@ public class DetailActivity extends AppCompatActivity {
                     values.put(MoviesProvider.MOVIEBACKDROPPATH, movie.getMovieBackdropPath());
                     getContentResolver().insert(MoviesProvider.CONTENT_URI, values);
 
-                    //Trecho só para exibir os filmes que estão no banco via prompt
-/*                    Uri movies = Uri.parse("content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/favorites");
-                    Cursor c = getContentResolver().query(movies,null,null,null, null) ;
-
-                    if (c.moveToFirst()) {
-                        do{
-                            Toast.makeText(getApplicationContext(), c.getString(c.getColumnIndex(MoviesProvider._ID)) + " , " +
-                                    c.getString(c.getColumnIndex(MoviesProvider.MOVIETITLE)),
-                                    Toast.LENGTH_SHORT).show();
-                        } while (c.moveToNext());
-                    }*/
-
                 }
             }
         });
+
     }
 
     //Método que executa a ação de voltar para o menu anterior
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == android.R.id.home) {
-            //onBackPressed();
-            finish();
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.menu_item_share:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + movieTrailerToShare);
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Share using"));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        /**********/
-        //Em teste
-        else if(itemId == R.id.menu_item_share){
-            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            String shareBody = "Your body here";
-            String shareSub = "Your subject here";
-            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(sharingIntent, "Share using"));
-        }
-        /**********/
-        return super.onOptionsItemSelected(item);
     }
 
     //Método para exibição do menu superior
@@ -179,12 +167,6 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
-
-        // Locate MenuItem with ShareActionProvider
-        MenuItem movieShare = menu.findItem(R.id.menu_item_share);
-        // Fetch and store ShareActionProvider
-        this.mViewHolder.shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(movieShare);
-        this.mViewHolder.shareButton = findViewById(R.id.menu_item_share);
 
         return true;
     }
@@ -201,9 +183,7 @@ public class DetailActivity extends AppCompatActivity {
         Retrofit retrofitTrailer;
         Retrofit retrofitReview;
         Button favButton;
-        Button shareButton;
         FavoritePreferencies favoriteMovies;
-        ShareActionProvider shareActionProvider;
     }
 
     //Listagem dos trailers
@@ -225,6 +205,8 @@ public class DetailActivity extends AppCompatActivity {
                         //Define adapter
                         TrailersListAdapter adapter = new TrailersListAdapter(result.getResults());
                         mViewHolder.recyclerTrailers.setAdapter(adapter);
+
+                        movieTrailerToShare = result.getResults().get(0).getKey();
 
                         clickEventsCaller(result.getResults());
                     }
