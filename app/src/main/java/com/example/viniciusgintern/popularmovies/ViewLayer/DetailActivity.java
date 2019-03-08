@@ -1,19 +1,14 @@
-package com.example.viniciusgintern.popularmovies.activity;
+package com.example.viniciusgintern.popularmovies.ViewLayer;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,18 +21,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.viniciusgintern.popularmovies.Config;
-import com.example.viniciusgintern.popularmovies.data.MoviesProvider;
+import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
+import com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider;
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
-import com.example.viniciusgintern.popularmovies.adapter.ReviewsListAdapter;
-import com.example.viniciusgintern.popularmovies.adapter.TrailersListAdapter;
-import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
-import com.example.viniciusgintern.popularmovies.model.ReviewModel.ReviewResult;
-import com.example.viniciusgintern.popularmovies.model.RetrofitService.RetrofitService2;
-import com.example.viniciusgintern.popularmovies.model.RetrofitService.RetrofitService3;
-import com.example.viniciusgintern.popularmovies.model.TrailerModel.Trailer;
-import com.example.viniciusgintern.popularmovies.model.TrailerModel.TrailerResult;
+import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.ReviewsListAdapter;
+import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.TrailersListAdapter;
+import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
+import com.example.viniciusgintern.popularmovies.ModelLayer.ReviewModel.ReviewResult;
+import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService2;
+import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService3;
+import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.Trailer;
+import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -67,10 +61,10 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerTrailers = findViewById(R.id.recyclerTrailers);
         this.mViewHolder.recyclerReviews = findViewById(R.id.recyclerReviews);
         this.mViewHolder.favButton = findViewById(R.id.favButton);
-        this.mViewHolder.favoriteMovies = new FavoritePreferencies(getApplicationContext());
-        setSupportActionBar(this.mViewHolder.main_toolbar);
+        this.mViewHolder.favoriteMovies = new SharedPreferencies(getApplicationContext());
 
         //Cria a seta com clique na barra superior para voltar ao menu principal
+        setSupportActionBar(this.mViewHolder.main_toolbar);
         ActionBar myActionBar = getSupportActionBar();
         if(myActionBar != null){
             myActionBar.setDisplayHomeAsUpEnabled(true);
@@ -114,6 +108,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
+                    //Remoção do BD
                     mViewHolder.favoriteMovies.removeMovieFromFavList(movie);
                     Toast.makeText(getApplicationContext(),"Removed from favorites",Toast.LENGTH_SHORT).show();
                     mViewHolder.favButton.setText("MAKE AS FAVORITE");
@@ -123,6 +118,7 @@ public class DetailActivity extends AppCompatActivity {
                     getContentResolver().delete(targetTable,MoviesProvider.MOVIEID, mSelectionArgs);
                 }
                 else {
+                    //Inserção no BD
                     mViewHolder.favoriteMovies.saveMovieAsFavorite(movie);
                     Toast.makeText(getApplicationContext(),"Saved as favorite",Toast.LENGTH_SHORT).show();
                     mViewHolder.favButton.setText("ALREADY FAVORITE");
@@ -136,7 +132,6 @@ public class DetailActivity extends AppCompatActivity {
                     values.put(MoviesProvider.MOVIEIMAGEADDRESS , movie.getMovieImageAddress());
                     values.put(MoviesProvider.MOVIEBACKDROPPATH, movie.getMovieBackdropPath());
                     getContentResolver().insert(MoviesProvider.CONTENT_URI, values);
-
                 }
             }
         });
@@ -166,7 +161,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
 
         return true;
     }
@@ -183,7 +178,7 @@ public class DetailActivity extends AppCompatActivity {
         Retrofit retrofitTrailer;
         Retrofit retrofitReview;
         Button favButton;
-        FavoritePreferencies favoriteMovies;
+        SharedPreferencies favoriteMovies;
     }
 
     //Listagem dos trailers
@@ -206,6 +201,7 @@ public class DetailActivity extends AppCompatActivity {
                         TrailersListAdapter adapter = new TrailersListAdapter(result.getResults());
                         mViewHolder.recyclerTrailers.setAdapter(adapter);
 
+                        //Define o primeiro trailer como item para ser compartilhado
                         movieTrailerToShare = result.getResults().get(0).getKey();
 
                         clickEventsCaller(result.getResults());

@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.activity;
+package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,13 +13,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.example.viniciusgintern.popularmovies.Config;
+import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
-import com.example.viniciusgintern.popularmovies.model.RetrofitService.RetrofitService;
-import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
-import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
-import com.example.viniciusgintern.popularmovies.model.MovieModel.MovieResult;
+import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.MoviesListAdapter;
+import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
+import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.MovieResult;
+import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService4;
 
 import java.util.List;
 
@@ -29,21 +28,20 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class TopRatedActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerMovies;
     private Toolbar toolbar;
+    private RecyclerView recyclerTopRated;
     private Retrofit retrofit;
-    private FavoritePreferencies favoriteMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_top_rated);
 
+        recyclerTopRated = findViewById(R.id.recyclerTopRatedMovies);
         toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
-        recyclerMovies = findViewById(R.id.recyclerMovies);
 
         //Define Layout
         int orientation = this.getResources().getConfiguration().orientation;
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             imageAmount = 4;
         }
         //Inicialização do Grid do Layout
-        recyclerMovies.setLayoutManager(new GridLayoutManager(this,imageAmount));
+        recyclerTopRated.setLayoutManager(new GridLayoutManager(this,imageAmount));
 
         //Criação do objeto retrofit
         retrofit = new Retrofit.Builder()
@@ -63,20 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Carregamento dos dados pela API
         this.getMoviesFromApi();
-
     }
 
-    //Método que executa a ação de ir para a tela de favoritos
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.PopMovies){
-            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //Trecho de exibição do menu superior
+    //Método para exibição do menu superior
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -84,10 +71,28 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Método que executa a ação de ir para a tela de favoritos
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.FavMovies){
+            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+            startActivity(intent);
+        }
+        else if (itemId == R.id.MostPopular){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+        else if (itemId == R.id.TopRated){
+            Intent intent = new Intent(getApplicationContext(), TopRatedActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     //Aquisição de dados dos filmes
     public void getMoviesFromApi(){
 
-        RetrofitService service = retrofit.create(RetrofitService.class);
+        RetrofitService4 service = retrofit.create(RetrofitService4.class);
         Call<MovieResult> call = service.getMovies(Config.TMDBApiKey);
 
         call.enqueue(new Callback<MovieResult>() {
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     if(result != null){
                         //Define adapter
                         MoviesListAdapter adapter = new MoviesListAdapter(result.getMovieList());
-                        recyclerMovies.setAdapter(adapter);
+                        recyclerTopRated.setAdapter(adapter);
 
                         clickEventsCaller(result.getMovieList());
                     }
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MovieResult> call, Throwable t) {
-                Toast.makeText(MainActivity.this,
+                Toast.makeText(TopRatedActivity.this,
                         "Não foi possível realizar a requisição",
                         Toast.LENGTH_SHORT).show();
             }
@@ -117,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
     //Listener para eventos de clique num filme
     private void clickEventsCaller(final List<Movie> movieList) {
         //Evento de click em cada imagem
-        recyclerMovies.addOnItemTouchListener(
+        recyclerTopRated.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getApplicationContext(),
-                        recyclerMovies,
+                        recyclerTopRated,
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {

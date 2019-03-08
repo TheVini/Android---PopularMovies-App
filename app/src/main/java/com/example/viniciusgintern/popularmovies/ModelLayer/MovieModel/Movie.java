@@ -1,6 +1,4 @@
-package com.example.viniciusgintern.popularmovies.model.MovieModel;
-
-import android.widget.ImageView;
+package com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel;
 
 import java.io.Serializable;
 import java.util.List;

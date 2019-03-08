@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.model.ReviewModel;
+package com.example.viniciusgintern.popularmovies.ModelLayer.ReviewModel;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

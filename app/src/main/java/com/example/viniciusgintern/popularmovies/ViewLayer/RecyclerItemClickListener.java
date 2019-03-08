@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies;
+package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

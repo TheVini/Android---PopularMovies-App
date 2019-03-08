@@ -13,18 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.FavoritesActivity" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".ViewLayer.TopRatedActivity"></activity>
+        <activity android:name=".ViewLayer.FavoritesActivity" />
+        <activity android:name=".ViewLayer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DetailActivity" />
+        <activity android:name=".ViewLayer.DetailActivity" />
+
         <provider
-            android:name=".data.MoviesProvider"
-            android:authorities="com.example.viniciusgintern.popularmovies.data.MoviesProvider"
+            android:name=".ControllerLayer.MoviesProvider"
+            android:authorities="com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider"
             android:exported="false" />
     </application>
 

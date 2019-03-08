@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.model.TrailerModel;
+package com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

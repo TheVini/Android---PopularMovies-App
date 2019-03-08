@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.adapter;
+package com.example.viniciusgintern.popularmovies.ViewLayer.adapter;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.data.MoviesProvider;
-import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
+import com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 public class FavoriteMoviesListAdapter extends RecyclerView.Adapter<FavoriteMoviesListAdapter.MyViewHolder>{
 

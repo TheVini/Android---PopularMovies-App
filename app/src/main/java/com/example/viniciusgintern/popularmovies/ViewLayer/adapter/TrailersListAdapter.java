@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.adapter;
+package com.example.viniciusgintern.popularmovies.ViewLayer.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.model.TrailerModel.Trailer;
+import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.Trailer;
 
 import java.util.List;
 

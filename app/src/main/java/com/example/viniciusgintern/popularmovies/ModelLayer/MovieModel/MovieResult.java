@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.model.MovieModel;
+package com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

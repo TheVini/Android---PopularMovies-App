@@ -1,8 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/PopMovies"
+        android:id="@+id/FavMovies"
         android:title="Favorites"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/MostPopular"
+        android:title="Most Popular"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/TopRated"
+        android:title="Top Rated"
         app:showAsAction="never"/>
 
 </menu>

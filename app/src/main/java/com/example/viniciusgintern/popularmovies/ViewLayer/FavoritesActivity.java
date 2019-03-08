@@ -1,10 +1,9 @@
-package com.example.viniciusgintern.popularmovies.activity;
+package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,14 +16,9 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.RecyclerItemClickListener;
-import com.example.viniciusgintern.popularmovies.adapter.FavoriteMoviesListAdapter;
-import com.example.viniciusgintern.popularmovies.adapter.MoviesListAdapter;
-import com.example.viniciusgintern.popularmovies.data.MoviesProvider;
-import com.example.viniciusgintern.popularmovies.model.MovieModel.Movie;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.FavoriteMoviesListAdapter;
+import com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider;
+import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -34,7 +28,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerFavorites;
     private Retrofit retrofit;
-    private FavoritePreferencies favoriteMovies;
+    private SharedPreferencies favoriteMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +38,6 @@ public class FavoritesActivity extends AppCompatActivity {
         recyclerFavorites = findViewById(R.id.recyclerFavorites);
         toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
-
-        //Cria a seta com clique na barra superior para voltar ao menu principal
-        ActionBar myActionBar = getSupportActionBar();
-        if(myActionBar != null){
-            myActionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         //Define Layout
         int orientation = this.getResources().getConfiguration().orientation;
@@ -74,9 +62,17 @@ public class FavoritesActivity extends AppCompatActivity {
     //Método que executa a ação de voltar para o menu anterior
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == android.R.id.home) {
-            //onBackPressed();
-            finish();
+        if (itemId == R.id.FavMovies){
+            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+            startActivity(intent);
+        }
+        else if (itemId == R.id.MostPopular){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+        else if (itemId == R.id.TopRated){
+            Intent intent = new Intent(getApplicationContext(), TopRatedActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -85,7 +81,7 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

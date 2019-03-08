@@ -1,4 +1,4 @@
-package com.example.viniciusgintern.popularmovies.model.ReviewModel;
+package com.example.viniciusgintern.popularmovies.ModelLayer.ReviewModel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

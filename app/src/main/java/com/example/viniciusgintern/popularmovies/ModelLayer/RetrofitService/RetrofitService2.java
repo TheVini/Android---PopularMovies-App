@@ -1,6 +1,6 @@
-package com.example.viniciusgintern.popularmovies.model.RetrofitService;
+package com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService;
 
-import com.example.viniciusgintern.popularmovies.model.TrailerModel.TrailerResult;
+import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.TrailerResult;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
