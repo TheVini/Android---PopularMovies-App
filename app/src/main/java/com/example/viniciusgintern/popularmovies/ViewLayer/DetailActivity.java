@@ -23,13 +23,12 @@ import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
 import com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider;
+import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.ReviewsListAdapter;
 import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.TrailersListAdapter;
 import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
 import com.example.viniciusgintern.popularmovies.ModelLayer.ReviewModel.ReviewResult;
-import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService2;
-import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService3;
 import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.Trailer;
 import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
@@ -114,7 +113,7 @@ public class DetailActivity extends AppCompatActivity {
                     mViewHolder.favButton.setText("MAKE AS FAVORITE");
 
                     String[] mSelectionArgs = {movie.getMovieId().toString()};
-                    Uri targetTable = Uri.parse("content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/favorites/" + movie.getMovieId().toString());
+                    Uri targetTable = Uri.parse("content://com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider/favorites/" + movie.getMovieId().toString());
                     getContentResolver().delete(targetTable,MoviesProvider.MOVIEID, mSelectionArgs);
                 }
                 else {
@@ -188,8 +187,8 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerTrailers.setLayoutManager(new GridLayoutManager(this,1));
         this.mViewHolder.recyclerTrailers.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-        RetrofitService2 service = this.mViewHolder.retrofitTrailer.create(RetrofitService2.class);
-        Call<TrailerResult> call = service.getTrailers( movie.getMovieId(), APIKey,"en-US", "1");
+        RetrofitService service = this.mViewHolder.retrofitTrailer.create(RetrofitService.class);
+        Call<TrailerResult> call = service.getMovieTrailers( movie.getMovieId(), APIKey,"en-US", "1");
 
         call.enqueue(new Callback<TrailerResult>() {
             @Override
@@ -225,8 +224,8 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerReviews.setHasFixedSize(true);
         this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-        RetrofitService3 service = this.mViewHolder.retrofitReview.create(RetrofitService3.class);
-        Call<ReviewResult> call = service.getReviews(movie.getMovieId(),APIKey, "en-US", "1");
+        RetrofitService service = this.mViewHolder.retrofitReview.create(RetrofitService.class);
+        Call<ReviewResult> call = service.getMovieReviews(movie.getMovieId(),APIKey, "en-US", "1");
 
         call.enqueue(new Callback<ReviewResult>() {
             @Override

@@ -14,8 +14,8 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
-import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService;
+import com.example.viniciusgintern.popularmovies.R;
 import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.MoviesListAdapter;
 import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
 import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.MovieResult;
@@ -92,9 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Aquisição de dados dos filmes
     public void getMoviesFromApi(){
-
         RetrofitService service = retrofit.create(RetrofitService.class);
-        Call<MovieResult> call = service.getMovies(Config.TMDBApiKey);
+        Call<MovieResult> call = service.getPopularMovies(Config.TMDBApiKey);
 
         call.enqueue(new Callback<MovieResult>() {
             @Override

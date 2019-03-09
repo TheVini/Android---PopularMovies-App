@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class MoviesProvider extends ContentProvider {
 
-    static final String AUTHORITY = "com.example.viniciusgintern.popularmovies.data.MoviesProvider";
+    static final String AUTHORITY = "com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/favorites");
 
     public static final String _ID = "_id";
@@ -57,7 +57,7 @@ public class MoviesProvider extends ContentProvider {
 
     protected static final class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context){
-            super(context, DATABASE_NAME, null, 3);
+            super(context, DATABASE_NAME, null, 5);
         }
 
         @Override
