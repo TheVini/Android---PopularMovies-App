@@ -1,6 +1,7 @@
 package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,6 +30,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView recyclerFavorites;
     private Retrofit retrofit;
     private SharedPreferencies favoriteMovies;
+    private SharedPreferencies sharedPreferencies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,15 @@ public class FavoritesActivity extends AppCompatActivity {
 
         //Carregamento dos dados do banco
         this.getDataFromBD();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("LastActivity",1);
+        editor.commit();
     }
 
     //Método que executa a ação de voltar para o menu anterior
@@ -88,7 +99,7 @@ public class FavoritesActivity extends AppCompatActivity {
     //Aquisição de dados dos filmes do BD
     public void getDataFromBD() {
         //Trecho só para exibir os filmes que estão no banco
-        Uri movies = Uri.parse("content://com.example.viniciusgintern.popularmovies.data.MoviesProvider/favorites");
+        Uri movies = Uri.parse("content://com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider/favorites");
         Cursor c = getContentResolver().query(movies,null,null,null, null) ;
 
         FavoriteMoviesListAdapter adapter = new FavoriteMoviesListAdapter(c);

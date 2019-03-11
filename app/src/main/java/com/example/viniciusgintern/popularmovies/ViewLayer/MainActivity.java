@@ -1,7 +1,9 @@
 package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.example.viniciusgintern.popularmovies.ControllerLayer.BusinessClass;
 import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
 import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.R;
@@ -33,11 +36,29 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerMovies;
     private Toolbar toolbar;
     private Retrofit retrofit;
+    private BusinessClass businessClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+        if(preferences.contains("LastActivity")){
+            //System.out.println("A ultima Activity foi: " + preferences.getInt("LastActivity",0));
+            int LastActivity = preferences.getInt("LastActivity",0);
+            if (LastActivity == 0){
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+            else if(LastActivity == 1){
+                Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+                startActivity(intent);
+            } else if(LastActivity == 2){
+                Intent intent = new Intent(getApplicationContext(), TopRatedActivity.class);
+                startActivity(intent);
+            }
+        }
 
         toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
@@ -61,6 +82,18 @@ public class MainActivity extends AppCompatActivity {
 
         //Carregamento dos dados pela API
         this.getMoviesFromApi();
+
+/*        Call<MovieResult> call = null;
+        businessClass.getMoviesFromApi(retrofit, recyclerMovies, getApplicationContext(), 1,  call);*/
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("LastActivity",0);
+        editor.commit();
     }
 
     //Método que executa a ação de ir para a tela de favoritos

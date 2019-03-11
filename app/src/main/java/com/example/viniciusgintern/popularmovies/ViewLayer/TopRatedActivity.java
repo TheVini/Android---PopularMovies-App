@@ -1,6 +1,7 @@
 package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class TopRatedActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerTopRated;
     private Retrofit retrofit;
+    private SharedPreferencies sharedPreferencies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,15 @@ public class TopRatedActivity extends AppCompatActivity {
 
         //Carregamento dos dados pela API
         this.getMoviesFromApi();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("LastActivity",2);
+        editor.commit();
     }
 
     //Método para exibição do menu superior

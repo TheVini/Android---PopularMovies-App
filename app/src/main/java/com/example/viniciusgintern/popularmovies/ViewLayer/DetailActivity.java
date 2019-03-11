@@ -2,6 +2,7 @@ package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -45,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private ViewHolder mViewHolder = new ViewHolder();
     private String movieTrailerToShare;
+    private SharedPreferencies sharedPreferencies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

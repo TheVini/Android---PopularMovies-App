@@ -35,4 +35,14 @@ public class SharedPreferencies {
         editor.remove(movie.getMovieId().toString());
         editor.commit();
     }
+
+    public void saveActivityAsLastOne(String activityName){
+        editor.putString("LastActivity",activityName);
+        editor.commit();
+    }
+
+    public String getLastActivity(){
+        String restoredActivity = preferences.getString("LastActivity",null);
+        return restoredActivity;
+    }
 }
