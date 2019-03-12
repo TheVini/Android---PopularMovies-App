@@ -1,6 +1,5 @@
 package com.example.viniciusgintern.popularmovies.ViewLayer;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
@@ -10,23 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.example.viniciusgintern.popularmovies.ControllerLayer.BusinessClass;
-import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
-import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.MoviesListAdapter;
-import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
-import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.MovieResult;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -35,7 +21,7 @@ public class TopRatedActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerTopRated;
     private Retrofit retrofit;
-    private SharedPreferencies sharedPreferencies;
+    private ProjectSharedPreferences projectSharedPreferences;
     private BusinessClass businessClass;
 
     @Override
@@ -72,7 +58,10 @@ public class TopRatedActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        sharedPreferencies.saveActivityAsTheLastOne(2);
+        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("LastActivity",2);
+        editor.commit();
     }
 
     //Método para exibição do menu superior

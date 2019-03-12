@@ -2,6 +2,7 @@ package com.example.viniciusgintern.popularmovies.ControllerLayer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,6 +24,7 @@ import com.example.viniciusgintern.popularmovies.ViewLayer.DetailActivity;
 import com.example.viniciusgintern.popularmovies.ViewLayer.FavoritesActivity;
 import com.example.viniciusgintern.popularmovies.ViewLayer.MainActivity;
 import com.example.viniciusgintern.popularmovies.ViewLayer.RecyclerItemClickListener;
+import com.example.viniciusgintern.popularmovies.ViewLayer.ProjectSharedPreferences;
 import com.example.viniciusgintern.popularmovies.ViewLayer.TopRatedActivity;
 import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.MoviesListAdapter;
 import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.ReviewsListAdapter;

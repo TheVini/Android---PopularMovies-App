@@ -1,5 +1,6 @@
 package com.example.viniciusgintern.popularmovies.ViewLayer;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,7 +24,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerFavorites;
     private Retrofit retrofit;
-    private SharedPreferencies favoriteMovies;
+    private ProjectSharedPreferences favoriteMovies;
     private BusinessClass businessClass;
 
     @Override
@@ -58,7 +59,10 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        favoriteMovies.saveActivityAsTheLastOne(1);
+        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("LastActivity",1);
+        editor.commit();
     }
 
     //Método que executa a ação de voltar para o menu anterior

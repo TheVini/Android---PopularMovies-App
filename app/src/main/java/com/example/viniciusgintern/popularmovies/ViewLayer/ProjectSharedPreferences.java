@@ -5,15 +5,15 @@ import android.content.SharedPreferences;
 
 import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
 
-//Camada de negócio - SharedPreferencies
-public class SharedPreferencies {
+//Camada de negócio - ProjectSharedPreferences
+public class ProjectSharedPreferences {
     private Context context;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
     private final String FILE_NAME = "favoriteMovies.preferences";
 
-    public SharedPreferencies(Context context) {
+    public ProjectSharedPreferences(Context context) {
         this.context = context;
         preferences = context.getSharedPreferences(FILE_NAME,0);
         editor = preferences.edit();

@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailActivity extends AppCompatActivity {
 
     private ViewHolder mViewHolder = new ViewHolder();
-    private SharedPreferencies sharedPreferencies;
+    private ProjectSharedPreferences projectSharedPreferences;
     private BusinessClass businessClassTrailer;
     private BusinessClass businessClassReview;
 
@@ -56,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         this.mViewHolder.recyclerTrailers = findViewById(R.id.recyclerTrailers);
         this.mViewHolder.recyclerReviews = findViewById(R.id.recyclerReviews);
         this.mViewHolder.favButton = findViewById(R.id.favButton);
-        this.mViewHolder.favoriteMovies = new SharedPreferencies(getApplicationContext());
+        this.mViewHolder.favoriteMovies = new ProjectSharedPreferences(getApplicationContext());
 
         //Cria a seta com clique na barra superior para voltar ao menu principal
         setSupportActionBar(this.mViewHolder.main_toolbar);
@@ -175,7 +175,7 @@ public class DetailActivity extends AppCompatActivity {
         Retrofit retrofitTrailer;
         Retrofit retrofitReview;
         Button favButton;
-        SharedPreferencies favoriteMovies;
+        ProjectSharedPreferences favoriteMovies;
     }
 
     //Listagem dos trailers
