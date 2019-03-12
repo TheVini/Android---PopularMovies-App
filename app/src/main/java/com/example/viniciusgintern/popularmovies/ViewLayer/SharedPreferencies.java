@@ -36,13 +36,9 @@ public class SharedPreferencies {
         editor.commit();
     }
 
-    public void saveActivityAsLastOne(String activityName){
-        editor.putString("LastActivity",activityName);
+    //Save activity as the last one
+    public void saveActivityAsTheLastOne(int activityNumber){
+        editor.putInt("LastActivity",activityNumber);
         editor.commit();
-    }
-
-    public String getLastActivity(){
-        String restoredActivity = preferences.getString("LastActivity",null);
-        return restoredActivity;
     }
 }

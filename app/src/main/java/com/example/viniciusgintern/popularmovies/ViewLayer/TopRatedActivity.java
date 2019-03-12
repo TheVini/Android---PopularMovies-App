@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.example.viniciusgintern.popularmovies.ControllerLayer.BusinessClass;
 import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
 import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.R;
@@ -35,6 +36,7 @@ public class TopRatedActivity extends AppCompatActivity {
     private RecyclerView recyclerTopRated;
     private Retrofit retrofit;
     private SharedPreferencies sharedPreferencies;
+    private BusinessClass businessClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +64,15 @@ public class TopRatedActivity extends AppCompatActivity {
                 .build();
 
         //Carregamento dos dados pela API
-        this.getMoviesFromApi();
+        //this.getMoviesFromApi();
+        businessClass = new BusinessClass();
+        businessClass.getMoviesFromAPI(retrofit,recyclerTopRated, this.getApplicationContext(), 2);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("LastActivity",2);
-        editor.commit();
+    protected void onStop() {
+        super.onStop();
+        sharedPreferencies.saveActivityAsTheLastOne(2);
     }
 
     //Método para exibição do menu superior
@@ -85,82 +86,10 @@ public class TopRatedActivity extends AppCompatActivity {
     //Método que executa a ação de ir para a tela de favoritos
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.FavMovies){
-            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
-            startActivity(intent);
-        }
-        else if (itemId == R.id.MostPopular){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-        }
-        else if (itemId == R.id.TopRated){
-            Intent intent = new Intent(getApplicationContext(), TopRatedActivity.class);
-            startActivity(intent);
-        }
+
+        //Seleção da activity através do menu superior direito
+        businessClass.switchActivity(itemId,getApplicationContext());
+
         return super.onOptionsItemSelected(item);
-    }
-
-    //Aquisição de dados dos filmes
-    public void getMoviesFromApi(){
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-        Call<MovieResult> call = service.getTopRatedMovies(Config.TMDBApiKey);
-
-        call.enqueue(new Callback<MovieResult>() {
-            @Override
-            public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
-                if (response.isSuccessful()) {
-                    MovieResult result = response.body();
-                    if(result != null){
-                        //Define adapter
-                        MoviesListAdapter adapter = new MoviesListAdapter(result.getMovieList());
-                        recyclerTopRated.setAdapter(adapter);
-
-                        clickEventsCaller(result.getMovieList());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResult> call, Throwable t) {
-                Toast.makeText(TopRatedActivity.this,
-                        "Não foi possível realizar a requisição",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    //Listener para eventos de clique num filme
-    private void clickEventsCaller(final List<Movie> movieList) {
-        //Evento de click em cada imagem
-        recyclerTopRated.addOnItemTouchListener(
-                new RecyclerItemClickListener(
-                        getApplicationContext(),
-                        recyclerTopRated,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                //System.out.println(movieList.get(position).getMovieTitle());
-                                Movie movie = movieList.get(position);
-                                Toast.makeText(getApplicationContext(), movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                                intent.putExtra("objeto",movie);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-                                Movie movie = movieList.get(position);
-                                Toast.makeText(getApplicationContext(),movie.getMovieTitle(),Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            }
-                        }
-                )
-        );
     }
 }

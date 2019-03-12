@@ -2,7 +2,6 @@ package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -11,30 +10,24 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.viniciusgintern.popularmovies.ControllerLayer.BusinessClass;
 import com.example.viniciusgintern.popularmovies.ControllerLayer.Config;
 import com.example.viniciusgintern.popularmovies.ControllerLayer.MoviesProvider;
 import com.example.viniciusgintern.popularmovies.ModelLayer.RetrofitService.RetrofitService;
 import com.example.viniciusgintern.popularmovies.R;
-import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.ReviewsListAdapter;
 import com.example.viniciusgintern.popularmovies.ViewLayer.adapter.TrailersListAdapter;
 import com.example.viniciusgintern.popularmovies.ModelLayer.MovieModel.Movie;
-import com.example.viniciusgintern.popularmovies.ModelLayer.ReviewModel.ReviewResult;
-import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.Trailer;
 import com.example.viniciusgintern.popularmovies.ModelLayer.TrailerModel.TrailerResult;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,8 +38,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailActivity extends AppCompatActivity {
 
     private ViewHolder mViewHolder = new ViewHolder();
-    private String movieTrailerToShare;
     private SharedPreferencies sharedPreferencies;
+    private BusinessClass businessClassTrailer;
+    private BusinessClass businessClassReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +89,9 @@ public class DetailActivity extends AppCompatActivity {
 
         //Carregamento dos trailers pela API
         this.getTrailersFromApi(movie, Config.TMDBApiKey);
-        //Carregamento dos reviews pela API
-        this.getReviewsFromAPI(movie,Config.TMDBApiKey);
+
+        businessClassReview = new BusinessClass();
+        businessClassReview.getReviewsFromAPI(this.mViewHolder.retrofitReview, this.mViewHolder.recyclerReviews, this.getApplicationContext(),movie,Config.TMDBApiKey);
 
         //Definir texto do botão
         if(mViewHolder.favoriteMovies.containMovieInFavList(movie)){
@@ -149,7 +144,7 @@ public class DetailActivity extends AppCompatActivity {
             case R.id.menu_item_share:
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + movieTrailerToShare);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + this.mViewHolder.movieTrailerToShare);
                 shareIntent.setType("text/plain");
                 startActivity(Intent.createChooser(shareIntent, "Share using"));
                 return true;
@@ -168,6 +163,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private static class ViewHolder{
+        String movieTrailerToShare;
         ImageView detailImage;
         ImageView main_backdrop;
         TextView movieYear;
@@ -203,9 +199,14 @@ public class DetailActivity extends AppCompatActivity {
                         mViewHolder.recyclerTrailers.setAdapter(adapter);
 
                         //Define o primeiro trailer como item para ser compartilhado
-                        movieTrailerToShare = result.getResults().get(0).getKey();
+                        try{
+                            mViewHolder.movieTrailerToShare = result.getResults().get(0).getKey();
+                        }catch (Exception e){
+                            mViewHolder.movieTrailerToShare = "";
+                        }
 
-                        clickEventsCaller(result.getResults());
+                        businessClassTrailer = new BusinessClass();
+                        businessClassTrailer.clickEventsCallerForTrailers(result.getResults(),mViewHolder.recyclerTrailers,getApplicationContext());
                     }
                 }
             }
@@ -217,73 +218,5 @@ public class DetailActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    //Listagem dos reviews
-    public void getReviewsFromAPI(Movie movie, String APIKey){
-        //Inicialização do Grid do Layout para Reviews
-        this.mViewHolder.recyclerReviews.setLayoutManager(new GridLayoutManager(this,1));
-        this.mViewHolder.recyclerReviews.setHasFixedSize(true);
-        this.mViewHolder.recyclerReviews.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
-
-        RetrofitService service = this.mViewHolder.retrofitReview.create(RetrofitService.class);
-        Call<ReviewResult> call = service.getMovieReviews(movie.getMovieId(),APIKey, "en-US", "1");
-
-        call.enqueue(new Callback<ReviewResult>() {
-            @Override
-            public void onResponse(Call<ReviewResult> call, Response<ReviewResult> response) {
-                if (response.isSuccessful()) {
-                    ReviewResult result = response.body();
-                    if(result != null){
-                        if(result.getResults().size() != 0){
-                            //Define adapter
-                            ReviewsListAdapter adapter = new ReviewsListAdapter(result.getResults());
-                            mViewHolder.recyclerReviews.setAdapter(adapter);
-                        }
-                        else{
-                            ReviewsListAdapter adapter = new ReviewsListAdapter();
-                            mViewHolder.recyclerReviews.setAdapter(adapter);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ReviewResult> call, Throwable t) {
-                Toast.makeText(DetailActivity.this,
-                        "Não foi possível realizar a requisição",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    //Evento de clique para execução dos trailers
-    private void clickEventsCaller(final List<Trailer> trailerList) {
-        //Evento de click em cada imagem
-        mViewHolder.recyclerTrailers.addOnItemTouchListener(
-                new RecyclerItemClickListener(
-                        getApplicationContext(),
-                        mViewHolder.recyclerTrailers,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                //System.out.println(movieList.get(position).getMovieTitle());
-                                System.out.println();
-                                Trailer trailer = trailerList.get(position);
-
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="+trailer.getKey())));
-                                Log.i("Video", "Video Playing....");
-                            }
-
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-                            }
-
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            }
-                        }
-                )
-        );
     }
 }
