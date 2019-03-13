@@ -93,6 +93,7 @@ public class FavoritesActivity extends AppCompatActivity {
         FavoriteMoviesListAdapter adapter = new FavoriteMoviesListAdapter(c);
         recyclerFavorites.setAdapter(adapter);
 
+        businessClass = new BusinessClass();
         businessClass.clickEventsCallerForMoviesFromBD(c,recyclerFavorites,getApplicationContext());
     }
 }

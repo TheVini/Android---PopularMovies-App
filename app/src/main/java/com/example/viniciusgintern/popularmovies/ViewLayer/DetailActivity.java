@@ -2,6 +2,7 @@ package com.example.viniciusgintern.popularmovies.ViewLayer;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -139,7 +140,17 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                finish();
+                SharedPreferences preferences = getSharedPreferences("favoriteMovies.preferences",0);
+                if(preferences.contains("LastActivity")){
+                    int LastActivity = preferences.getInt("LastActivity",0);
+                    if(LastActivity == 1){
+                        Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+                        startActivity(intent);
+                    } else if(LastActivity == 2){
+                        Intent intent = new Intent(getApplicationContext(), TopRatedActivity.class);
+                        startActivity(intent);
+                    }
+                }
                 return true;
             case R.id.menu_item_share:
                 Intent shareIntent = new Intent();
